@@ -1,4 +1,4 @@
-#' Tidy Verb to Propagate Medical Claim Dates Forward
+#' Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates
 #'
 #' To push supposedly overlapping dates forward for a specified group (e.g. patient ids or medication classes).
 #' Used directly after a claims data frame has been grouped appropriately for adherence measurements per
@@ -25,13 +25,41 @@ propagate_date <- function(.data, date_var = date, days_supply_var = days_supply
   date <- enquo(date_var)
   days_supply <- enquo(days_supply_var)
 
-  .data %>%
-    rename(date = !!date,
-           days_supply = !!days_supply) %>%
-    arrange(date) %>%
-    nest(data = everything()) %>%
-    mutate(propagated_date = map(.data$data, date_check)) %>%
-    unnest(.data$propagated_date) %>%
-    select(-.data$data)
+  # Determine whether data is grouped to regroup at the end
+  if(is_grouped_df(.data)){
+    
+    # determine the grouping
+    groupingVariable <- syms(group_vars(.data))
+    
+    .data %>%
+      # rename data appropriately to standardize with the rest of the functions
+      # will consider more flexible applications at some point
+      rename(date = !!date,
+             days_supply = !!days_supply) %>%
+      arrange(date, .by_group = TRUE) %>%
+      group_nest() %>% 
+      # apply date_check() to all groups
+      mutate(propagated_date = map(.data$data, date_check)) %>%
+      unnest(.data$propagated_date) %>%
+      select(-.data$data) %>% 
+      mutate(adjusted_date = if_else(is.na(.data$adjusted_date), .data$date, .data$adjusted_date)) %>% 
+      # regroup by the grouping variables (to prevent constant grouping)
+      # most of the time you're going to want to keep these groups
+      group_by(!!!groupingVariable)
+    
+  } else {
+    
+    .data %>%
+      rename(date = !!date,
+             days_supply = !!days_supply) %>%
+      arrange(date, .by_group = TRUE) %>%
+      group_nest() %>% 
+      mutate(propagated_date = map(.data$data, date_check)) %>%
+      unnest(.data$propagated_date) %>%
+      select(-.data$data) %>% 
+      mutate(adjusted_date = if_else(is.na(.data$adjusted_date), .data$date, .data$adjusted_date))
+  
+  }
+  
 
 }

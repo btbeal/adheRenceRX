@@ -1,12 +1,12 @@
 Package: adheRenceRX
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: A group of Tidy Verbs to Assess Medication Adherence
 Version: 1.0
 Date: 2020-10-27
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does
-       as one or more full sentences.
+Author: Brennan T. Beal
+Maintainer: Brennan T. Beal <brennanbeal@gmail.com>
+Description: This is a (mildly) opinionated package of tidy verbs geared towards leaving the user the flexibility 
+    of defining their own parameters while handling the tough stuff.
 License: GPL (>= 2)
 Imports: 
     Rcpp (>= 1.0.5),
@@ -17,3 +17,6 @@ Imports:
     rlang
 LinkingTo: Rcpp
 RoxygenNote: 7.1.0
+Depends: 
+    R (>= 2.10)
+LazyData: true

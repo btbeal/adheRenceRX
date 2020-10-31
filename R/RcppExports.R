@@ -9,6 +9,7 @@ NULL
 #' @param x Our date vector
 #' @param y Our days supply vector
 #' @return A new vector to be appended to a users dataframe with adjusted dates
+#' @export
 NULL
 
 date_checkCpp <- function(x, y) {

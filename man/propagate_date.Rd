@@ -2,7 +2,7 @@
 % Please edit documentation in R/propagate_date.R
 \name{propagate_date}
 \alias{propagate_date}
-\title{Tidy Verb to Propagate Medical Claim Dates Forward}
+\title{Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates}
 \usage{
 propagate_date(.data, date_var = date, days_supply_var = days_supply)
 }
