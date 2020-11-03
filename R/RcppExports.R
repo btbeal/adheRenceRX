@@ -16,3 +16,19 @@ date_checkCpp <- function(x, y) {
     .Call(`_adheRenceRX_date_checkCpp`, x, y)
 }
 
+#' C++ Helper for \code{episode_check()}
+#'
+#' Meant to be a C++ helper within episode_check() to improve speed
+NULL
+
+#' @param x Our gap vector
+#' @param perm_gap An integer value representing the permissible gap in therapy, if the gap is greater than this number, a new episode will be created
+#' @param init_rank An integer representing the initial ranking (What should we label episode 1?). The default is 1. 
+#' @return A new vector labeling each rows corresponding episode of care to be appended to a users dataframe
+#' @export
+NULL
+
+episode_checkCpp <- function(x, perm_gap, init_rank) {
+    .Call(`_adheRenceRX_episode_checkCpp`, x, perm_gap, init_rank)
+}
+

@@ -9,7 +9,7 @@
 #' @param date_var Date column (will default to 'date' if not specified)
 #' @param days_supply_var Days supply column (will default to "days_supply" if none supplied)
 #'
-#' @import dplyr
+#' @rawNamespace import(dplyr, except = data_frame)
 #' @import tidyr
 #' @importFrom purrr map
 #' @import lubridate
