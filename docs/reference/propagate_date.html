@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates — propagate_date • adheRenceRX</title>
+<title>Adjusted Overlapping Pharmaceutical Claim Dates — propagate_date • adheRenceRX</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,10 @@
 
 
 
-<meta property="og:title" content="Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates — propagate_date" />
-<meta property="og:description" content="To push supposedly overlapping dates forward for a specified group (e.g. patient ids or medication classes).
-Used directly after a claims data frame has been grouped appropriately for adherence measurements per
-Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
+<meta property="og:title" content="Adjusted Overlapping Pharmaceutical Claim Dates — propagate_date" />
+<meta property="og:description" content="When assessing pharmaceutical adherence, one should adjust overlapping dates forward for a specified group (e.g. patient ids or medication classes) 
+so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and other 15 days later, the next fill date
+should be moved up 15 days. This function is modeled after recommendations from Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
 Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77." />
 
 
@@ -106,15 +106,15 @@ Navigating the wild west of medication adherence reporting in specialty pharmacy
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates</h1>
+    <h1>Adjusted Overlapping Pharmaceutical Claim Dates</h1>
     
     <div class="hidden name"><code>propagate_date.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>To push supposedly overlapping dates forward for a specified group (e.g. patient ids or medication classes).
-Used directly after a claims data frame has been grouped appropriately for adherence measurements per
-Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
+    <p>When assessing pharmaceutical adherence, one should adjust overlapping dates forward for a specified group (e.g. patient ids or medication classes) 
+so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and other 15 days later, the next fill date
+should be moved up 15 days. This function is modeled after recommendations from Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
 Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.</p>
     </div>
 
@@ -129,11 +129,11 @@ Navigating the wild west of medication adherence reporting in specialty pharmacy
     </tr>
     <tr>
       <th>date_var</th>
-      <td><p>Date column (will default to 'date' if not specified)</p></td>
+      <td><p>Date, Date column (will default to 'date' if not specified)</p></td>
     </tr>
     <tr>
       <th>days_supply_var</th>
-      <td><p>Days supply column (will default to "days_supply" if none supplied)</p></td>
+      <td><p>Integer, Days supply column (will default to "days_supply" if none supplied)</p></td>
     </tr>
     </table>
 
@@ -141,6 +141,33 @@ Navigating the wild west of medication adherence reporting in specialty pharmacy
 
     <p>A new claims data frame with an appended column, "adjusted_date"</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>adheRenceRX</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
+<span class='va'>toy_claims</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>ID</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>propagate_date</span><span class='op'>(</span>date_var <span class='op'>=</span> <span class='va'>date</span>, days_supply_var <span class='op'>=</span> <span class='va'>days_supply</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 22 x 4</span><span>
+#&gt; </span><span style='color: #555555;'># Groups:   ID [3]</span><span>
+#&gt;    ID    date       days_supply adjusted_date
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>       
+#&gt; </span><span style='color: #555555;'> 1</span><span> A     2020-01-01          30 2020-01-01   
+#&gt; </span><span style='color: #555555;'> 2</span><span> A     2020-01-31          60 2020-01-31   
+#&gt; </span><span style='color: #555555;'> 3</span><span> A     2020-03-01          60 2020-03-31   
+#&gt; </span><span style='color: #555555;'> 4</span><span> A     2020-05-30          30 2020-05-30   
+#&gt; </span><span style='color: #555555;'> 5</span><span> A     2020-06-29          30 2020-06-29   
+#&gt; </span><span style='color: #555555;'> 6</span><span> A     2020-07-29          30 2020-07-29   
+#&gt; </span><span style='color: #555555;'> 7</span><span> A     2020-08-28          30 2020-08-28   
+#&gt; </span><span style='color: #555555;'> 8</span><span> A     2020-09-27          30 2020-09-27   
+#&gt; </span><span style='color: #555555;'> 9</span><span> B     2020-01-01          30 2020-01-01   
+#&gt; </span><span style='color: #555555;'>10</span><span> B     2020-01-31          30 2020-01-31   
+#&gt; </span><span style='color: #555555;'># … with 12 more rows</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

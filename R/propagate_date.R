@@ -1,13 +1,13 @@
-#' Tidy Verb to Forward-Adjusted Overlapping Pharmaceutical Claim Dates
+#' Adjusted Overlapping Pharmaceutical Claim Dates
 #'
-#' To push supposedly overlapping dates forward for a specified group (e.g. patient ids or medication classes).
-#' Used directly after a claims data frame has been grouped appropriately for adherence measurements per
-#' Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
+#' When assessing pharmaceutical adherence, one should adjust overlapping dates forward for a specified group (e.g. patient ids or medication classes) 
+#' so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and other 15 days later, the next fill date
+#' should be moved up 15 days. This function is modeled after recommendations from Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
 #' Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.
 #'
 #' @param .data Data to be piped into the function
-#' @param date_var Date column (will default to 'date' if not specified)
-#' @param days_supply_var Days supply column (will default to "days_supply" if none supplied)
+#' @param date_var Date, Date column (will default to 'date' if not specified)
+#' @param days_supply_var Integer, Days supply column (will default to "days_supply" if none supplied)
 #'
 #' @rawNamespace import(dplyr, except = data_frame)
 #' @import tidyr
@@ -18,6 +18,13 @@
 #' @return A new claims data frame with an appended column, "adjusted_date"
 #' @export
 #'
+#' @examples 
+#' library(adheRenceRX)
+#' library(dplyr)
+#' 
+#' toy_claims %>% 
+#'   group_by(ID) %>% 
+#'   propagate_date(date_var = date, days_supply_var = days_supply)
 
 propagate_date <- function(.data, date_var = date, days_supply_var = days_supply){
 

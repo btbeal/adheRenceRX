@@ -37,9 +37,11 @@ episode_check <- function(df){
 #' @export
 #'
 #' @examples 
+#' library(adheRenceRX)
+#' library(dplyr)
 #' 
 #' toy_claims %>% 
-#'   group_by(ID) %>% 
+#'   filter(ID == "D") %>% 
 #'   propagate_date() %>% 
 #'   identify_gaps() %>% 
 #'   rank_episodes(.permissible_gap = 20, .initial_rank = 1)

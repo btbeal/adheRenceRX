@@ -23,9 +23,11 @@ an adjusted_date column, which identifies the date after being adjusted for over
 by the aforementioned functions within this package!
 }
 \examples{
+library(adheRenceRX)
+library(dplyr)
 
 toy_claims \%>\% 
-  group_by(ID) \%>\% 
+  filter(ID == "D") \%>\% 
   propagate_date() \%>\% 
   identify_gaps() \%>\% 
   rank_episodes(.permissible_gap = 20, .initial_rank = 1)
