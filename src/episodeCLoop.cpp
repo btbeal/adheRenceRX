@@ -9,9 +9,9 @@ using namespace Rcpp;
 //' @param perm_gap An integer value representing the permissible gap in therapy, if the gap is greater than this number, a new episode will be created
 //' @param init_rank An integer representing the initial ranking (What should we label episode 1?). The default is 1. 
 //' @return A new vector labeling each rows corresponding episode of care to be appended to a users dataframe
-//' @export
 
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name = ".episode_checkCpp")]]
 NumericVector episode_checkCpp(NumericVector x, int perm_gap, int init_rank){
   int data_length = x.size();
   NumericVector out(data_length);

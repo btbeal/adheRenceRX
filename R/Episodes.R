@@ -16,7 +16,7 @@ episode_check <- function(df){
   if(l_df < 2){
     return(df)
   } else {
-    epi_vec <- episode_checkCpp(gap, perm_gap, epi_rank)
+    epi_vec <- .episode_checkCpp(gap, perm_gap, epi_rank)
     df$episode <- epi_vec
     return(df)
   }
@@ -70,7 +70,7 @@ rank_episodes <- function(.data, .permissible_gap = NULL, .initial_rank = 1){
       # regroup by the grouping variables (to prevent constant grouping)
       # most of the time you're going to want to keep these groups
       group_by(!!!groupingVariable) %>% 
-      select(-.data$permi_gap)
+      select(-.data$permi_gap, -.data$initial_rank)
       
     
   } else {
@@ -87,7 +87,7 @@ rank_episodes <- function(.data, .permissible_gap = NULL, .initial_rank = 1){
       unnest(.data$episode) %>%
       select(-.data$data) %>% 
       mutate(episode = if_else(is.na(.data$episode), .data$initial_rank, .data$episode)) %>% 
-      select(-.data$permi_gap)
+      select(-.data$permi_gap, -.data$initial_rank)
     
     
   }

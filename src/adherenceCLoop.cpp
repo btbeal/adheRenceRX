@@ -8,9 +8,8 @@ using namespace Rcpp;
 //' @param x Our date vector
 //' @param y Our days supply vector
 //' @return A new vector to be appended to a users dataframe with adjusted dates
-//' @export
 
-// [[Rcpp::export]]
+// [[Rcpp::export(name = ".date_checkCpp")]]
 NumericVector date_checkCpp(NumericVector x, NumericVector y){
   int data_length = x.size();
   NumericVector out(data_length);

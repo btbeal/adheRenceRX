@@ -3,6 +3,7 @@ useDynLib(adheRenceRX, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
 
 importFrom(Rcpp, evalCpp)
+export(calculate_pdc)
 export(date_check)
 export(episode_check)
 export(identify_gaps)

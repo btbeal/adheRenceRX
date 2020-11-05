@@ -150,15 +150,15 @@ by the aforementioned functions within this package!</p>
   <span class='fu'><a href='propagate_date.html'>propagate_date</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'><a href='identify_gaps.html'>identify_gaps</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>rank_episodes</span><span class='op'>(</span>.permissible_gap <span class='op'>=</span> <span class='fl'>20</span>, .initial_rank <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span><span>
-#&gt;   ID    date       days_supply adjusted_date   gap initial_rank episode
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> D     2020-01-01          60 2020-01-01        0            1       1
-#&gt; </span><span style='color: #555555;'>2</span><span> D     2020-01-31          60 2020-03-01        0            1       1
-#&gt; </span><span style='color: #555555;'>3</span><span> D     2020-03-01          60 2020-04-30        0            1       1
-#&gt; </span><span style='color: #555555;'>4</span><span> D     2020-05-30          30 2020-06-29       30            1       2
-#&gt; </span><span style='color: #555555;'>5</span><span> D     2020-08-28          60 2020-08-28        0            1       2
-#&gt; </span><span style='color: #555555;'>6</span><span> D     2020-09-27          30 2020-10-27        0            1       2</div><div class='input'>  
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 6</span><span>
+#&gt;   ID    date       days_supply adjusted_date   gap episode
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> D     2020-01-01          60 2020-01-01        0       1
+#&gt; </span><span style='color: #555555;'>2</span><span> D     2020-01-31          60 2020-03-01        0       1
+#&gt; </span><span style='color: #555555;'>3</span><span> D     2020-03-01          60 2020-04-30        0       1
+#&gt; </span><span style='color: #555555;'>4</span><span> D     2020-05-30          30 2020-06-29       30       2
+#&gt; </span><span style='color: #555555;'>5</span><span> D     2020-08-28          60 2020-08-28        0       2
+#&gt; </span><span style='color: #555555;'>6</span><span> D     2020-09-27          30 2020-10-27        0       2</div><div class='input'>  
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
