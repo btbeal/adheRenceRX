@@ -17,10 +17,11 @@ knitr::opts_chunk$set(
 
 # adheRenceRX
 
+Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/) 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs they "tidy" way to allow users to manipulate their data as they'd like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you'd rather do research than run a function for an hour!  
+The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the "tidy" way to allow users to manipulate their data as they'd like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you'd rather do research than run a function for an hour!  
   
 This was a lot of fun to build but is still in production. If you find errors, or know things you'd like to see done differently, reach out!
 
@@ -43,14 +44,17 @@ Our verbs to date are:
   - `propagate_date()`
   - `identify_gaps()` or `summarise_gaps()`
   - `rank_episodes()`
+  - `calculate_pdc()`
 
-The latter three assume that one has propagated their dates forward.  
+For the most part, our verbs assume that dates have been propagated forward and gaps have been properly identified. This is on purpose but is subject to change in the future.  
 
 ## Examples
 
+More examples of use can be found on within each functions documentation; however, this should provide a decent overview of how the package is to be used.  
+  
+
 ```{r example1}
 library(adheRenceRX)
-library(magrittr)
 library(dplyr)
 
 # manipulate toy_claims, which has IDs based on the Canfield 2019 paper 
@@ -86,7 +90,7 @@ toy_claims %>%
   summarise_gaps()
 ```
 
-With the gaps identified, we can check for episodes of care using our `rank_episodes()` functions. Note that this function assumes that you've propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, then everything after a gap that large or more will be considered the next episode! Let me show you.  
+With the gaps identified, we can check for episodes of care using our `rank_episodes()` functions. Note that this function assumes that you've propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, and everything after a gap that large or more will be considered the next episode! Let me show you.  
   
 ```{r example3}
 # The same code from above
@@ -100,6 +104,16 @@ toy_claims %>%
   rank_episodes(.permissible_gap = 10)
 ```
   
+Finally, an actual adherence calculation. This is fairly straightforward since the bulk of the work has been done adjusting your dates and then appropriately identifying the gaps in therapy. Still, more functions = more fun!  
+  
+```{r calculations}
+toy_claims %>% 
+  group_by(ID) %>% 
+  propagate_date() %>% 
+  identify_gaps() %>% 
+  # tell our function what the boundaries are
+  calculate_pdc(.max_date = "2020-07-28", .min_date = "2020-01-01")
+```
 ## Enjoy!
 
 That's all we have for now. Again, this package is meant to provide some helper functions with the meat of the project coming from our `propagate_date()` and `rank_episodes()`. Notbaly, those tasks can't be accomplished with `dplyr` alone (as they do not have vectorised solutions). For this reason, we've written some C++ functions to help you speed up the task!  

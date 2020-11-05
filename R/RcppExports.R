@@ -12,7 +12,7 @@ NULL
 NULL
 
 .date_checkCpp <- function(x, y) {
-    .Call(`_adheRenceRX_date_checkCpp`, x, y)
+    .Call('_adheRenceRX_date_checkCpp', PACKAGE = 'adheRenceRX', x, y)
 }
 
 #' C++ Helper for \code{episode_check()}
@@ -27,6 +27,6 @@ NULL
 NULL
 
 .episode_checkCpp <- function(x, perm_gap, init_rank) {
-    .Call(`_adheRenceRX_episode_checkCpp`, x, perm_gap, init_rank)
+    .Call('_adheRenceRX_episode_checkCpp', PACKAGE = 'adheRenceRX', x, perm_gap, init_rank)
 }
 

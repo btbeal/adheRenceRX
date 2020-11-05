@@ -3,16 +3,13 @@
 
 # adheRenceRX
 
-Find the website here:
-https://btbeal.github.io/adheRenceRX/
-<!-- badges: start -->
-
-<!-- badges: end -->
+Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
+<!-- badges: start --> <!-- badges: end -->
 
 The goal of adheRenceRX is to provide a slightly opinionated set of
 functions to allow researchers to assess medication adherence in the
 most flexible way possible. The goal was (is) to write piping-friendly
-verbs they “tidy” way to allow users to manipulate their data as they’d
+verbs the “tidy” way to allow users to manipulate their data as they’d
 like without storing data multiple times into their environment. The
 final value is that our looping functions are written with C++ allowing
 speed and performance when you’d rather do research than run a function
@@ -51,14 +48,20 @@ Our verbs to date are:
   - `propagate_date()`
   - `identify_gaps()` or `summarise_gaps()`
   - `rank_episodes()`
+  - `calculate_pdc()`
 
-The latter three assume that one has propagated their dates forward.
+For the most part, our verbs assume that dates have been propagated
+forward and gaps have been properly identified. This is on purpose but
+is subject to change in the future.
 
 ## Examples
 
+More examples of use can be found on within each functions
+documentation; however, this should provide a decent overview of how the
+package is to be used.
+
 ``` r
 library(adheRenceRX)
-library(magrittr)
 library(dplyr)
 
 # manipulate toy_claims, which has IDs based on the Canfield 2019 paper 
@@ -143,7 +146,7 @@ toy_claims %>%
 With the gaps identified, we can check for episodes of care using our
 `rank_episodes()` functions. Note that this function assumes that you’ve
 propagated your dates appropriately and identified all gaps. You can
-then tell our function what can be considered a permissible gap, then
+then tell our function what can be considered a permissible gap, and
 everything after a gap that large or more will be considered the next
 episode\! Let me show you.
 
@@ -157,24 +160,44 @@ toy_claims %>%
   identify_gaps() %>% 
   # say that anything over a 10 day gap should count as the next episode
   rank_episodes(.permissible_gap = 10)
-#> # A tibble: 14 x 7
+#> # A tibble: 14 x 6
 #> # Groups:   ID [2]
-#>    ID    date       days_supply adjusted_date   gap initial_rank episode
-#>    <chr> <date>           <dbl> <date>        <dbl>        <dbl>   <dbl>
-#>  1 B     2020-01-01          30 2020-01-01        0            1       1
-#>  2 B     2020-01-31          30 2020-01-31        0            1       1
-#>  3 B     2020-03-01          30 2020-03-01       60            1       2
-#>  4 B     2020-05-30          60 2020-05-30        0            1       2
-#>  5 B     2020-06-29          60 2020-07-29        0            1       2
-#>  6 B     2020-07-29          30 2020-09-27        0            1       2
-#>  7 B     2020-08-28          30 2020-10-27        0            1       2
-#>  8 B     2020-09-27          30 2020-11-26        0            1       2
-#>  9 D     2020-01-01          60 2020-01-01        0            1       1
-#> 10 D     2020-01-31          60 2020-03-01        0            1       1
-#> 11 D     2020-03-01          60 2020-04-30        0            1       1
-#> 12 D     2020-05-30          30 2020-06-29       30            1       2
-#> 13 D     2020-08-28          60 2020-08-28        0            1       2
-#> 14 D     2020-09-27          30 2020-10-27        0            1       2
+#>    ID    date       days_supply adjusted_date   gap episode
+#>    <chr> <date>           <dbl> <date>        <dbl>   <dbl>
+#>  1 B     2020-01-01          30 2020-01-01        0       1
+#>  2 B     2020-01-31          30 2020-01-31        0       1
+#>  3 B     2020-03-01          30 2020-03-01       60       2
+#>  4 B     2020-05-30          60 2020-05-30        0       2
+#>  5 B     2020-06-29          60 2020-07-29        0       2
+#>  6 B     2020-07-29          30 2020-09-27        0       2
+#>  7 B     2020-08-28          30 2020-10-27        0       2
+#>  8 B     2020-09-27          30 2020-11-26        0       2
+#>  9 D     2020-01-01          60 2020-01-01        0       1
+#> 10 D     2020-01-31          60 2020-03-01        0       1
+#> 11 D     2020-03-01          60 2020-04-30        0       1
+#> 12 D     2020-05-30          30 2020-06-29       30       2
+#> 13 D     2020-08-28          60 2020-08-28        0       2
+#> 14 D     2020-09-27          30 2020-10-27        0       2
+```
+
+Finally, an actual adherence calculation. This is fairly straightforward
+since the bulk of the work has been done adjusting your dates and then
+appropriately identifying the gaps in therapy. Still, more functions =
+more fun\!
+
+``` r
+toy_claims %>% 
+  group_by(ID) %>% 
+  propagate_date() %>% 
+  identify_gaps() %>% 
+  # tell our function what the boundaries are
+  calculate_pdc(.max_date = "2020-07-28", .min_date = "2020-01-01")
+#> # A tibble: 3 x 2
+#>   ID    adherence
+#>   <chr>     <dbl>
+#> 1 A         1    
+#> 2 B         0.713
+#> 3 D         0.856
 ```
 
 ## Enjoy\!

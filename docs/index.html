@@ -63,9 +63,8 @@
 <div id="adherencerx" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#adherencerx" class="anchor"></a>adheRenceRX</h1></div>
-<p>Find the website here: <a href="https://btbeal.github.io/adheRenceRX/" class="uri">https://btbeal.github.io/adheRenceRX/</a> <!-- badges: start --></p>
-<!-- badges: end -->
-<p>The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs they “tidy” way to allow users to manipulate their data as they’d like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you’d rather do research than run a function for an hour!</p>
+<p>Check out our site <a href="https://btbeal.github.io/adheRenceRX/">adheRenceRX</a> <!-- badges: start --> <!-- badges: end --></p>
+<p>The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the “tidy” way to allow users to manipulate their data as they’d like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you’d rather do research than run a function for an hour!</p>
 <p>This was a lot of fun to build but is still in production. If you find errors, or know things you’d like to see done differently, reach out!</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -88,15 +87,16 @@
 <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>
 </li>
 <li><code><a href="reference/rank_episodes.html">rank_episodes()</a></code></li>
+<li><code><a href="reference/calculate_pdc.html">calculate_pdc()</a></code></li>
 </ul>
-<p>The latter three assume that one has propagated their dates forward.</p>
+<p>For the most part, our verbs assume that dates have been propagated forward and gaps have been properly identified. This is on purpose but is subject to change in the future.</p>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
+<p>More examples of use can be found on within each functions documentation; however, this should provide a decent overview of how the package is to be used.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">adheRenceRX</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">magrittr</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="co"># manipulate toy_claims, which has IDs based on the Canfield 2019 paper </span>
@@ -167,7 +167,7 @@
 <span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 B                  60</span>
 <span class="co">#&gt; 2 D                  30</span></pre></div>
-<p>With the gaps identified, we can check for episodes of care using our <code><a href="reference/rank_episodes.html">rank_episodes()</a></code> functions. Note that this function assumes that you’ve propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, then everything after a gap that large or more will be considered the next episode! Let me show you.</p>
+<p>With the gaps identified, we can check for episodes of care using our <code><a href="reference/rank_episodes.html">rank_episodes()</a></code> functions. Note that this function assumes that you’ve propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, and everything after a gap that large or more will be considered the next episode! Let me show you.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="co"># The same code from above</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
@@ -178,24 +178,38 @@
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># say that anything over a 10 day gap should count as the next episode</span>
   <span class="fu"><a href="reference/rank_episodes.html">rank_episodes</a></span><span class="op">(</span>.permissible_gap <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 14 x 7</span>
+<span class="co">#&gt; # A tibble: 14 x 6</span>
 <span class="co">#&gt; # Groups:   ID [2]</span>
-<span class="co">#&gt;    ID    date       days_supply adjusted_date   gap initial_rank episode</span>
-<span class="co">#&gt;    &lt;chr&gt; &lt;date&gt;           &lt;dbl&gt; &lt;date&gt;        &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 B     2020-01-01          30 2020-01-01        0            1       1</span>
-<span class="co">#&gt;  2 B     2020-01-31          30 2020-01-31        0            1       1</span>
-<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01       60            1       2</span>
-<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30        0            1       2</span>
-<span class="co">#&gt;  5 B     2020-06-29          60 2020-07-29        0            1       2</span>
-<span class="co">#&gt;  6 B     2020-07-29          30 2020-09-27        0            1       2</span>
-<span class="co">#&gt;  7 B     2020-08-28          30 2020-10-27        0            1       2</span>
-<span class="co">#&gt;  8 B     2020-09-27          30 2020-11-26        0            1       2</span>
-<span class="co">#&gt;  9 D     2020-01-01          60 2020-01-01        0            1       1</span>
-<span class="co">#&gt; 10 D     2020-01-31          60 2020-03-01        0            1       1</span>
-<span class="co">#&gt; 11 D     2020-03-01          60 2020-04-30        0            1       1</span>
-<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29       30            1       2</span>
-<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28        0            1       2</span>
-<span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0            1       2</span></pre></div>
+<span class="co">#&gt;    ID    date       days_supply adjusted_date   gap episode</span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;date&gt;           &lt;dbl&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 B     2020-01-01          30 2020-01-01        0       1</span>
+<span class="co">#&gt;  2 B     2020-01-31          30 2020-01-31        0       1</span>
+<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01       60       2</span>
+<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30        0       2</span>
+<span class="co">#&gt;  5 B     2020-06-29          60 2020-07-29        0       2</span>
+<span class="co">#&gt;  6 B     2020-07-29          30 2020-09-27        0       2</span>
+<span class="co">#&gt;  7 B     2020-08-28          30 2020-10-27        0       2</span>
+<span class="co">#&gt;  8 B     2020-09-27          30 2020-11-26        0       2</span>
+<span class="co">#&gt;  9 D     2020-01-01          60 2020-01-01        0       1</span>
+<span class="co">#&gt; 10 D     2020-01-31          60 2020-03-01        0       1</span>
+<span class="co">#&gt; 11 D     2020-03-01          60 2020-04-30        0       1</span>
+<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29       30       2</span>
+<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28        0       2</span>
+<span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0       2</span></pre></div>
+<p>Finally, an actual adherence calculation. This is fairly straightforward since the bulk of the work has been done adjusting your dates and then appropriately identifying the gaps in therapy. Still, more functions = more fun!</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="co"># tell our function what the boundaries are</span>
+  <span class="fu"><a href="reference/calculate_pdc.html">calculate_pdc</a></span><span class="op">(</span>.max_date <span class="op">=</span> <span class="st">"2020-07-28"</span>, .min_date <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 3 x 2</span>
+<span class="co">#&gt;   ID    adherence</span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 A         1    </span>
+<span class="co">#&gt; 2 B         0.713</span>
+<span class="co">#&gt; 3 D         0.856</span></pre></div>
 </div>
 <div id="enjoy" class="section level2">
 <h2 class="hasAnchor">
