@@ -4,25 +4,23 @@
 \alias{calculate_pdc}
 \title{Calculate Proportion Days Covered}
 \usage{
-calculate_pdc(.data, .max_date, .min_date, .summarise = TRUE)
+calculate_pdc(.data, .summarise = TRUE)
 }
 \arguments{
 \item{.data}{data frame}
 
-\item{.max_date}{Character in year-month-date format, maximum date in consideration for adherence}
-
-\item{.min_date}{Character in year-month-date format, minimum date in consideration for adherence}
-
 \item{.summarise}{Logical value (defaulting to TRUE) indicating whether the output should be summarised or not}
 }
 \value{
-a summarised tibble, by default, with percentage of days a patient had medication coverage
+a summarised tibble, by default, with proportion of days covered calculated
 }
 \description{
 Calculate the proportion of days covered from a pharmaceutical claims database. This function is suggested only  
-after one has properly adjusted their dates (\code{propagate_dates()}) and identified gaps in therapy
-(\code{identify_gaps()}). Note that a proportion of days covered will never be greater than 1 and has a philosophy that 
-overlapping fill dates should never count for gaps prior to.
+after one has properly adjusted their dates (\code{propagate_date()}) and identified gaps in therapy
+(\code{identify_gaps()}). This function calculates a length of total therapy as the first fill date to the last for a given grouping. 
+Note that a proportion of days covered will never be greater than 1 and has a philosophy that 
+overlapping fill dates should be adjusted forwards but never backwards. Finally, if you'd like to view adherence by episodes after you have
+used \code{rank_episodes()}, the function will re-adjust gaps for you so that the gap that defined the episode isn't included.
 }
 \examples{
 library(adheRenceRX)
@@ -30,8 +28,17 @@ library(dplyr)
 
 toy_claims \%>\% 
   group_by(ID) \%>\% 
-  propagate_date() \%>\% 
+  propagate_date(.date = date, .days_supply = days_supply) \%>\% 
   identify_gaps() \%>\% 
-  calculate_pdc(.max_date = "2020-07-28", .min_date = "2020-01-01")
-
+  calculate_pdc()
+  
+#OR, one could group by the ID and episode of care like...
+toy_claims \%>\% 
+  group_by(ID) \%>\% 
+  propagate_date(.date = date, .days_supply = days_supply) \%>\% 
+  identify_gaps() \%>\% 
+  rank_episodes(.permissible_gap = 30) \%>\% 
+  ungroup() \%>\% 
+  group_by(ID, episode) \%>\% 
+  calculate_pdc()
 }

@@ -4,14 +4,14 @@
 \alias{propagate_date}
 \title{Adjusted Overlapping Pharmaceutical Claim Dates}
 \usage{
-propagate_date(.data, date_var = date, days_supply_var = days_supply)
+propagate_date(.data, .date_var = NULL, .days_supply_var = NULL)
 }
 \arguments{
 \item{.data}{Data to be piped into the function}
 
-\item{date_var}{Date, Date column (will default to 'date' if not specified)}
+\item{.date_var}{Date, Date column}
 
-\item{days_supply_var}{Integer, Days supply column (will default to "days_supply" if none supplied)}
+\item{.days_supply_var}{Integer, Days supply column}
 }
 \value{
 A new claims data frame with an appended column, "adjusted_date"
@@ -28,5 +28,5 @@ library(dplyr)
 
 toy_claims \%>\% 
   group_by(ID) \%>\% 
-  propagate_date(date_var = date, days_supply_var = days_supply)
+  propagate_date(.date_var = date, .days_supply_var = days_supply)
 }

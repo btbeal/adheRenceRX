@@ -33,14 +33,14 @@ date_check <- function(df){
 #' Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.
 #'
 #' @param .data Data to be piped into the function
-#' @param date_var Date, Date column (will default to 'date' if not specified)
-#' @param days_supply_var Integer, Days supply column (will default to "days_supply" if none supplied)
+#' @param .date_var Date, Date column
+#' @param .days_supply_var Integer, Days supply column
 #'
 #' @rawNamespace import(dplyr, except = data_frame)
 #' @import tidyr
 #' @importFrom purrr map
 #' @import lubridate
-#' @importFrom rlang enquo !!
+#' @importFrom rlang enquo !! quo_is_null
 #'
 #' @return A new claims data frame with an appended column, "adjusted_date"
 #' @export
@@ -51,14 +51,17 @@ date_check <- function(df){
 #' 
 #' toy_claims %>% 
 #'   group_by(ID) %>% 
-#'   propagate_date(date_var = date, days_supply_var = days_supply)
+#'   propagate_date(.date_var = date, .days_supply_var = days_supply)
 
-propagate_date <- function(.data, date_var = date, days_supply_var = days_supply){
+propagate_date <- function(.data, .date_var = NULL, .days_supply_var = NULL){
 
+  
+  
   # naming 'date_var' and 'days_supply_var' for consistent application
-  date <- enquo(date_var)
-  days_supply <- enquo(days_supply_var)
-
+  .date <- enquo(.date_var)
+  .days_supply <- enquo(.days_supply_var)
+  
+  
   # Determine whether data is grouped to regroup at the end
   if(is_grouped_df(.data)){
     
@@ -68,8 +71,8 @@ propagate_date <- function(.data, date_var = date, days_supply_var = days_supply
     .data %>%
       # rename data appropriately to standardize with the rest of the functions
       # will consider more flexible applications at some point
-      rename(date = !!date,
-             days_supply = !!days_supply) %>%
+      rename(date = !!.date,
+             days_supply = !!.days_supply) %>%
       arrange(date, .by_group = TRUE) %>%
       group_nest() %>% 
       # apply date_check() to all groups
@@ -84,8 +87,8 @@ propagate_date <- function(.data, date_var = date, days_supply_var = days_supply
   } else {
     
     .data %>%
-      rename(date = !!date,
-             days_supply = !!days_supply) %>%
+      rename(date = !!.date,
+             days_supply = !!.days_supply) %>%
       arrange(date, .by_group = TRUE) %>%
       group_nest() %>% 
       mutate(propagated_date = map(.data$data, date_check)) %>%

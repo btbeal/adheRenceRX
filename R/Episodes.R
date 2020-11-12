@@ -47,8 +47,15 @@ episode_check <- function(df){
 #'   rank_episodes(.permissible_gap = 20, .initial_rank = 1)
 #'   
 rank_episodes <- function(.data, .permissible_gap = NULL, .initial_rank = 1){
+  
+  # Check to see if user has entered a permissible gap
+  if(is.null(.permissible_gap)){
+    stop("'.permissible_gap' cannot be NULL; check ?rank_episodes for more information")
+  }
+  
   perm_gap <- .permissible_gap
   epi_rank <- .initial_rank
+  
   
   if(is_grouped_df(.data)){
     # determine the grouping

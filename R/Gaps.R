@@ -2,20 +2,32 @@
 #'
 #' @description Compute gaps in a patient's prescription claims history from the end of their prior fill 
 #' after one has adjusted dates with \code{propagate_date()}. This function assumes that one has
-#' arranged the dates and grouped appropriately outside of the function.
+#' arranged the dates and grouped appropriately outside of the function. The length of any gap will be appended 
+#' to the row after the gap has occured.
 #' 
 #' @param .data data frame
 #'
 #' @return A new claims tibble with an appended column, "gap"
 #' @export
 #'
+#' @examples 
+#' library(adheRenceRX)
+#' library(dplyr)
+#' 
+#' toy_claims %>% 
+#'   filter(ID == "D") %>% 
+#'   propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
+#'   identify_gaps()
+#'
+#'
 identify_gaps <- function(.data){
   
   .data %>% 
-    mutate(gap = as.numeric(lead(.data$adjusted_date) - .data$adjusted_date),
-           gap = .data$gap - .data$days_supply,
-           gap = if_else(is.na(.data$gap), 0, .data$gap))
-  
+    mutate(
+      gap = as.numeric(adjusted_date - lag(adjusted_date)),
+      gap = gap - lag(days_supply),
+      gap = if_else(is.na(gap), 0, gap)
+    )
 }
 
 #' Summarise Gaps in Therapy
@@ -31,7 +43,7 @@ identify_gaps <- function(.data){
 summarise_gaps <- function(.data){
 
   .data %>%
-    mutate(gap = as.numeric(lead(.data$adjusted_date) - .data$adjusted_date),
-           gap = .data$gap - .data$days_supply) %>%
+    mutate(gap = as.numeric(adjusted_date - lag(adjusted_date)),
+           gap = gap - lag(days_supply)) %>%
     summarise(Summary_Of_Gaps = sum(.data$gap, na.rm = TRUE))
 }

@@ -64,7 +64,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#adherencerx" class="anchor"></a>adheRenceRX</h1></div>
 <p>Check out our site <a href="https://btbeal.github.io/adheRenceRX/">adheRenceRX</a> <!-- badges: start --> <!-- badges: end --></p>
-<p>The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the “tidy” way to allow users to manipulate their data as they’d like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you’d rather do research than run a function for an hour!</p>
+<p>The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the “tidy” way to allow users to manipulate their data as they’d like without storing data multiple times into their environment. In tidy fashion, we aimed to create functions that did only one thing, ideally that thing is obviated by the name of the function! So, the package makes assessing adherence as flexible as possible with some key things left in the hands of the researcher. The final value is that functions without vectorised solutions (<code><a href="reference/propagate_date.html">propagate_date()</a></code> and <code><a href="reference/rank_episodes.html">rank_episodes()</a></code>) are written with C++ allowing speed and performance when you’d rather do research than run a function for an hour!</p>
 <p>This was a lot of fun to build but is still in production. If you find errors, or know things you’d like to see done differently, reach out!</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -77,9 +77,9 @@
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>Much of the inspiration for this package came from conversations with analysts who struggle to deal with the non-intuitive ways to deal with medication adherence calculations from pharmaceutical claims data. Primarily, how should we adjust days where a patient presumably has a double supply (i.e., when a patient has filled a medication prior to their assumed next fill date).</p>
+<p>Much of the inspiration for this package came from conversations with analysts who struggle to deal with the non-intuitive ways to deal with medication adherence calculations from pharmaceutical claims data.</p>
 <p>Our package is built around suggestions from Canfield and colleagues</p>
-<p>(2019) who note that overlapping fill dates should be pushed forward and never counted backwards, and I agree. For that reason, our package revolves around the first step of creating adjusted dates prior to any other calculation.</p>
+<p>(2019) who note that overlapping fill dates should be pushed forward and never counted backwards, to assess adherence properly. For that reason, our package revolves around the first step of creating adjusted dates prior to any other calculation. Next, one can identify the gaps, rank episodes of care, and calculate pdc. The purpose of the package was to be as flexible as possible. So, there will be a lot left to be done by the researcher (on purpose!). For example, are there time periods you’re particularly concerned with? Patient filters? Other groupings (maybe episode of care?). Those are meant to be defined with dplyr verbs outside of our functions.</p>
 <p>Our verbs to date are:</p>
 <ul>
 <li><code><a href="reference/propagate_date.html">propagate_date()</a></code></li>
@@ -106,7 +106,7 @@
   <span class="co"># Group by them (grouping not limited, of course)</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># propagate the dates forward within those groups</span>
-  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>date_var <span class="op">=</span> <span class="va">date</span>, days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span>
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 14 x 4</span>
 <span class="co">#&gt; # Groups:   ID [2]</span>
 <span class="co">#&gt;    ID    date       days_supply adjusted_date</span>
@@ -132,7 +132,7 @@
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>date_var <span class="op">=</span> <span class="va">date</span>, days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># But now we can identify gaps</span>
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 14 x 5</span>
@@ -141,8 +141,8 @@
 <span class="co">#&gt;    &lt;chr&gt; &lt;date&gt;           &lt;dbl&gt; &lt;date&gt;        &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 B     2020-01-01          30 2020-01-01        0</span>
 <span class="co">#&gt;  2 B     2020-01-31          30 2020-01-31        0</span>
-<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01       60</span>
-<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30        0</span>
+<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01        0</span>
+<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30       60</span>
 <span class="co">#&gt;  5 B     2020-06-29          60 2020-07-29        0</span>
 <span class="co">#&gt;  6 B     2020-07-29          30 2020-09-27        0</span>
 <span class="co">#&gt;  7 B     2020-08-28          30 2020-10-27        0</span>
@@ -150,8 +150,8 @@
 <span class="co">#&gt;  9 D     2020-01-01          60 2020-01-01        0</span>
 <span class="co">#&gt; 10 D     2020-01-31          60 2020-03-01        0</span>
 <span class="co">#&gt; 11 D     2020-03-01          60 2020-04-30        0</span>
-<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29       30</span>
-<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28        0</span>
+<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29        0</span>
+<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28       30</span>
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0</span>
 
 
@@ -159,7 +159,7 @@
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>date_var <span class="op">=</span> <span class="va">date</span>, days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># Summarising gaps</span>
   <span class="fu"><a href="reference/summarise_gaps.html">summarise_gaps</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 2 x 2</span>
@@ -173,7 +173,7 @@
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>date_var <span class="op">=</span> <span class="va">date</span>, days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># But now we can identify gaps</span>
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># say that anything over a 10 day gap should count as the next episode</span>
@@ -184,8 +184,8 @@
 <span class="co">#&gt;    &lt;chr&gt; &lt;date&gt;           &lt;dbl&gt; &lt;date&gt;        &lt;dbl&gt;   &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 B     2020-01-01          30 2020-01-01        0       1</span>
 <span class="co">#&gt;  2 B     2020-01-31          30 2020-01-31        0       1</span>
-<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01       60       2</span>
-<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30        0       2</span>
+<span class="co">#&gt;  3 B     2020-03-01          30 2020-03-01        0       1</span>
+<span class="co">#&gt;  4 B     2020-05-30          60 2020-05-30       60       2</span>
 <span class="co">#&gt;  5 B     2020-06-29          60 2020-07-29        0       2</span>
 <span class="co">#&gt;  6 B     2020-07-29          30 2020-09-27        0       2</span>
 <span class="co">#&gt;  7 B     2020-08-28          30 2020-10-27        0       2</span>
@@ -193,23 +193,22 @@
 <span class="co">#&gt;  9 D     2020-01-01          60 2020-01-01        0       1</span>
 <span class="co">#&gt; 10 D     2020-01-31          60 2020-03-01        0       1</span>
 <span class="co">#&gt; 11 D     2020-03-01          60 2020-04-30        0       1</span>
-<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29       30       2</span>
-<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28        0       2</span>
+<span class="co">#&gt; 12 D     2020-05-30          30 2020-06-29        0       1</span>
+<span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28       30       2</span>
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0       2</span></pre></div>
 <p>Finally, an actual adherence calculation. This is fairly straightforward since the bulk of the work has been done adjusting your dates and then appropriately identifying the gaps in therapy. Still, more functions = more fun!</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="co"># tell our function what the boundaries are</span>
-  <span class="fu"><a href="reference/calculate_pdc.html">calculate_pdc</a></span><span class="op">(</span>.max_date <span class="op">=</span> <span class="st">"2020-07-28"</span>, .min_date <span class="op">=</span> <span class="st">"2020-01-01"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 x 2</span>
-<span class="co">#&gt;   ID    adherence</span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 A         1    </span>
-<span class="co">#&gt; 2 B         0.713</span>
-<span class="co">#&gt; 3 D         0.856</span></pre></div>
+  <span class="fu"><a href="reference/calculate_pdc.html">calculate_pdc</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
+<span class="co">#&gt;   ID    total_gaps total_days adherence</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 A              0        270     1    </span>
+<span class="co">#&gt; 2 B             60        330     0.818</span>
+<span class="co">#&gt; 3 D             30        300     0.9</span></pre></div>
 </div>
 <div id="enjoy" class="section level2">
 <h2 class="hasAnchor">

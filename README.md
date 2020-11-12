@@ -10,10 +10,14 @@ The goal of adheRenceRX is to provide a slightly opinionated set of
 functions to allow researchers to assess medication adherence in the
 most flexible way possible. The goal was (is) to write piping-friendly
 verbs the “tidy” way to allow users to manipulate their data as they’d
-like without storing data multiple times into their environment. The
-final value is that our looping functions are written with C++ allowing
-speed and performance when you’d rather do research than run a function
-for an hour\!
+like without storing data multiple times into their environment. In tidy
+fashion, we aimed to create functions that did only one thing, ideally
+that thing is obviated by the name of the function\! So, the package
+makes assessing adherence as flexible as possible with some key things
+left in the hands of the researcher. The final value is that functions
+without vectorised solutions (`propagate_date()` and `rank_episodes()`)
+are written with C++ allowing speed and performance when you’d rather do
+research than run a function for an hour\!
 
 This was a lot of fun to build but is still in production. If you find
 errors, or know things you’d like to see done differently, reach out\!
@@ -33,15 +37,18 @@ devtools::install_github("btbeal/adheRenceRX")
 Much of the inspiration for this package came from conversations with
 analysts who struggle to deal with the non-intuitive ways to deal with
 medication adherence calculations from pharmaceutical claims data.
-Primarily, how should we adjust days where a patient presumably has a
-double supply (i.e., when a patient has filled a medication prior to
-their assumed next fill date).
 
 Our package is built around suggestions from Canfield and colleagues
 (2019) who note that overlapping fill dates should be pushed forward and
-never counted backwards, and I agree. For that reason, our package
-revolves around the first step of creating adjusted dates prior to any
-other calculation.
+never counted backwards, to assess adherence properly. For that reason,
+our package revolves around the first step of creating adjusted dates
+prior to any other calculation. Next, one can identify the gaps, rank
+episodes of care, and calculate pdc. The purpose of the package was to
+be as flexible as possible. So, there will be a lot left to be done by
+the researcher (on purpose\!). For example, are there time periods
+you’re particularly concerned with? Patient filters? Other groupings
+(maybe episode of care?). Those are meant to be defined with dplyr verbs
+outside of our functions.
 
 Our verbs to date are:
 
@@ -71,7 +78,7 @@ toy_claims %>%
   # Group by them (grouping not limited, of course)
   group_by(ID) %>% 
   # propagate the dates forward within those groups
-  propagate_date(date_var = date, days_supply_var = days_supply)
+  propagate_date(.date_var = date, .days_supply_var = days_supply)
 #> # A tibble: 14 x 4
 #> # Groups:   ID [2]
 #>    ID    date       days_supply adjusted_date
@@ -106,7 +113,7 @@ Once the dates have been adjusted, we can identify gaps in therapy with
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # But now we can identify gaps
   identify_gaps()
 #> # A tibble: 14 x 5
@@ -115,8 +122,8 @@ toy_claims %>%
 #>    <chr> <date>           <dbl> <date>        <dbl>
 #>  1 B     2020-01-01          30 2020-01-01        0
 #>  2 B     2020-01-31          30 2020-01-31        0
-#>  3 B     2020-03-01          30 2020-03-01       60
-#>  4 B     2020-05-30          60 2020-05-30        0
+#>  3 B     2020-03-01          30 2020-03-01        0
+#>  4 B     2020-05-30          60 2020-05-30       60
 #>  5 B     2020-06-29          60 2020-07-29        0
 #>  6 B     2020-07-29          30 2020-09-27        0
 #>  7 B     2020-08-28          30 2020-10-27        0
@@ -124,8 +131,8 @@ toy_claims %>%
 #>  9 D     2020-01-01          60 2020-01-01        0
 #> 10 D     2020-01-31          60 2020-03-01        0
 #> 11 D     2020-03-01          60 2020-04-30        0
-#> 12 D     2020-05-30          30 2020-06-29       30
-#> 13 D     2020-08-28          60 2020-08-28        0
+#> 12 D     2020-05-30          30 2020-06-29        0
+#> 13 D     2020-08-28          60 2020-08-28       30
 #> 14 D     2020-09-27          30 2020-10-27        0
 
 
@@ -133,7 +140,7 @@ toy_claims %>%
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # Summarising gaps
   summarise_gaps()
 #> # A tibble: 2 x 2
@@ -155,7 +162,7 @@ episode\! Let me show you.
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # But now we can identify gaps
   identify_gaps() %>% 
   # say that anything over a 10 day gap should count as the next episode
@@ -166,8 +173,8 @@ toy_claims %>%
 #>    <chr> <date>           <dbl> <date>        <dbl>   <dbl>
 #>  1 B     2020-01-01          30 2020-01-01        0       1
 #>  2 B     2020-01-31          30 2020-01-31        0       1
-#>  3 B     2020-03-01          30 2020-03-01       60       2
-#>  4 B     2020-05-30          60 2020-05-30        0       2
+#>  3 B     2020-03-01          30 2020-03-01        0       1
+#>  4 B     2020-05-30          60 2020-05-30       60       2
 #>  5 B     2020-06-29          60 2020-07-29        0       2
 #>  6 B     2020-07-29          30 2020-09-27        0       2
 #>  7 B     2020-08-28          30 2020-10-27        0       2
@@ -175,8 +182,8 @@ toy_claims %>%
 #>  9 D     2020-01-01          60 2020-01-01        0       1
 #> 10 D     2020-01-31          60 2020-03-01        0       1
 #> 11 D     2020-03-01          60 2020-04-30        0       1
-#> 12 D     2020-05-30          30 2020-06-29       30       2
-#> 13 D     2020-08-28          60 2020-08-28        0       2
+#> 12 D     2020-05-30          30 2020-06-29        0       1
+#> 13 D     2020-08-28          60 2020-08-28       30       2
 #> 14 D     2020-09-27          30 2020-10-27        0       2
 ```
 
@@ -188,16 +195,15 @@ more fun\!
 ``` r
 toy_claims %>% 
   group_by(ID) %>% 
-  propagate_date() %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   identify_gaps() %>% 
-  # tell our function what the boundaries are
-  calculate_pdc(.max_date = "2020-07-28", .min_date = "2020-01-01")
-#> # A tibble: 3 x 2
-#>   ID    adherence
-#>   <chr>     <dbl>
-#> 1 A         1    
-#> 2 B         0.713
-#> 3 D         0.856
+  calculate_pdc()
+#> # A tibble: 3 x 4
+#>   ID    total_gaps total_days adherence
+#>   <chr>      <dbl>      <dbl>     <dbl>
+#> 1 A              0        270     1    
+#> 2 B             60        330     0.818
+#> 3 D             30        300     0.9
 ```
 
 ## Enjoy\!

@@ -15,5 +15,17 @@ A new claims tibble with an appended column, "gap"
 \description{
 Compute gaps in a patient's prescription claims history from the end of their prior fill 
 after one has adjusted dates with \code{propagate_date()}. This function assumes that one has
-arranged the dates and grouped appropriately outside of the function.
+arranged the dates and grouped appropriately outside of the function. The length of any gap will be appended 
+to the row after the gap has occured.
+}
+\examples{
+library(adheRenceRX)
+library(dplyr)
+
+toy_claims \%>\% 
+  filter(ID == "D") \%>\% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) \%>\% 
+  identify_gaps()
+
+
 }

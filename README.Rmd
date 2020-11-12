@@ -21,7 +21,7 @@ Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the "tidy" way to allow users to manipulate their data as they'd like without storing data multiple times into their environment. The final value is that our looping functions are written with C++ allowing speed and performance when you'd rather do research than run a function for an hour!  
+The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the "tidy" way to allow users to manipulate their data as they'd like without storing data multiple times into their environment. In tidy fashion, we aimed to create functions that did only one thing, ideally that thing is obviated by the name of the function! So, the package makes assessing adherence as flexible as possible with some key things left in the hands of the researcher. The final value is that functions without vectorised solutions (`propagate_date()` and `rank_episodes()`) are written with C++ allowing speed and performance when you'd rather do research than run a function for an hour!  
   
 This was a lot of fun to build but is still in production. If you find errors, or know things you'd like to see done differently, reach out!
 
@@ -35,9 +35,9 @@ devtools::install_github("btbeal/adheRenceRX")
 ```
 ## Overview
 
-Much of the inspiration for this package came from conversations with analysts who struggle to deal with the non-intuitive ways to deal with medication adherence calculations from pharmaceutical claims data. Primarily, how should we adjust days where a patient presumably has a double supply (i.e., when a patient has filled a medication prior to their assumed next fill date).  
+Much of the inspiration for this package came from conversations with analysts who struggle to deal with the non-intuitive ways to deal with medication adherence calculations from pharmaceutical claims data.  
   
-Our package is built around suggestions from Canfield and colleagues (2019) who note that overlapping fill dates should be pushed forward and never counted backwards, and I agree. For that reason, our package revolves around the first step of creating adjusted dates prior to any other calculation.  
+Our package is built around suggestions from Canfield and colleagues (2019) who note that overlapping fill dates should be pushed forward and never counted backwards, to assess adherence properly. For that reason, our package revolves around the first step of creating adjusted dates prior to any other calculation. Next, one can identify the gaps, rank episodes of care, and calculate pdc. The purpose of the package was to be as flexible as possible. So, there will be a lot left to be done by the researcher (on purpose!). For example, are there time periods you're particularly concerned with? Patient filters? Other groupings (maybe episode of care?). Those are meant to be defined with dplyr verbs outside of our functions.
   
 Our verbs to date are:  
   
@@ -64,7 +64,7 @@ toy_claims %>%
   # Group by them (grouping not limited, of course)
   group_by(ID) %>% 
   # propagate the dates forward within those groups
-  propagate_date(date_var = date, days_supply_var = days_supply)
+  propagate_date(.date_var = date, .days_supply_var = days_supply)
 ```
   
 Notice that several rows have been pushed forward to account for overlaps in date. Also notice that the output changes the date and days supply variable to `date` and `days_supply` while adding an `adjusted_date` variable. The `adjusted_date` variable is used by some of the other functions so it is important to complete this step first.  
@@ -76,7 +76,7 @@ Once the dates have been adjusted, we can identify gaps in therapy with `identif
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # But now we can identify gaps
   identify_gaps()
 
@@ -85,7 +85,7 @@ toy_claims %>%
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # Summarising gaps
   summarise_gaps()
 ```
@@ -97,7 +97,7 @@ With the gaps identified, we can check for episodes of care using our `rank_epis
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
-  propagate_date(date_var = date, days_supply_var = days_supply) %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # But now we can identify gaps
   identify_gaps() %>% 
   # say that anything over a 10 day gap should count as the next episode
@@ -109,10 +109,9 @@ Finally, an actual adherence calculation. This is fairly straightforward since t
 ```{r calculations}
 toy_claims %>% 
   group_by(ID) %>% 
-  propagate_date() %>% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   identify_gaps() %>% 
-  # tell our function what the boundaries are
-  calculate_pdc(.max_date = "2020-07-28", .min_date = "2020-01-01")
+  calculate_pdc()
 ```
 ## Enjoy!
 

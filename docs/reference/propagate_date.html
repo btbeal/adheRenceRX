@@ -118,7 +118,7 @@ should be moved up 15 days. This function is modeled after recommendations from 
 Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>propagate_date</span><span class='op'>(</span><span class='va'>.data</span>, date_var <span class='op'>=</span> <span class='va'>date</span>, days_supply_var <span class='op'>=</span> <span class='va'>days_supply</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>propagate_date</span><span class='op'>(</span><span class='va'>.data</span>, .date_var <span class='op'>=</span> <span class='cn'>NULL</span>, .days_supply_var <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -128,12 +128,12 @@ Navigating the wild west of medication adherence reporting in specialty pharmacy
       <td><p>Data to be piped into the function</p></td>
     </tr>
     <tr>
-      <th>date_var</th>
-      <td><p>Date, Date column (will default to 'date' if not specified)</p></td>
+      <th>.date_var</th>
+      <td><p>Date, Date column</p></td>
     </tr>
     <tr>
-      <th>days_supply_var</th>
-      <td><p>Integer, Days supply column (will default to "days_supply" if none supplied)</p></td>
+      <th>.days_supply_var</th>
+      <td><p>Integer, Days supply column</p></td>
     </tr>
     </table>
 
@@ -147,7 +147,7 @@ Navigating the wild west of medication adherence reporting in specialty pharmacy
 
 <span class='va'>toy_claims</span> <span class='op'>%&gt;%</span> 
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>ID</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>propagate_date</span><span class='op'>(</span>date_var <span class='op'>=</span> <span class='va'>date</span>, days_supply_var <span class='op'>=</span> <span class='va'>days_supply</span><span class='op'>)</span>
+  <span class='fu'>propagate_date</span><span class='op'>(</span>.date_var <span class='op'>=</span> <span class='va'>date</span>, .days_supply_var <span class='op'>=</span> <span class='va'>days_supply</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 22 x 4</span><span>
 #&gt; </span><span style='color: #555555;'># Groups:   ID [3]</span><span>
 #&gt;    ID    date       days_supply adjusted_date
