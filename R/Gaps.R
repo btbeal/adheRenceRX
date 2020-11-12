@@ -24,9 +24,9 @@ identify_gaps <- function(.data){
   
   .data %>% 
     mutate(
-      gap = as.numeric(adjusted_date - lag(adjusted_date)),
-      gap = gap - lag(days_supply),
-      gap = if_else(is.na(gap), 0, gap)
+      gap = as.numeric(.data$adjusted_date - lag(.data$adjusted_date)),
+      gap = .data$gap - lag(.data$days_supply),
+      gap = if_else(is.na(.data$gap), 0, .data$gap)
     )
 }
 
@@ -43,7 +43,7 @@ identify_gaps <- function(.data){
 summarise_gaps <- function(.data){
 
   .data %>%
-    mutate(gap = as.numeric(adjusted_date - lag(adjusted_date)),
-           gap = gap - lag(days_supply)) %>%
+    mutate(gap = as.numeric(.data$adjusted_date - lag(.data$adjusted_date)),
+           gap = .data$gap - lag(.data$days_supply)) %>%
     summarise(Summary_Of_Gaps = sum(.data$gap, na.rm = TRUE))
 }

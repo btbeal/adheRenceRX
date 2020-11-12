@@ -45,24 +45,24 @@ calculate_pdc <- function(.data, .summarise = TRUE){
         gap = if_else(.data$adjusted_date == min(.data$adjusted_date), 0, .data$gap),
         max_date = max(.data$adjusted_date),
         min_date = min(.data$adjusted_date),
-        overlap = as.numeric(max_date - .data$adjusted_date),
+        overlap = as.numeric(.data$max_date - .data$adjusted_date),
         adjusted_gap = if_else(.data$overlap < .data$gap, .data$overlap, .data$gap)
       ) %>% 
       summarise(total_gaps = sum(.data$adjusted_gap),
                 total_days = max(as.numeric(.data$max_date-.data$min_date)),
-                adherence = 1 - total_gaps/total_days)
+                adherence = 1 - .data$total_gaps/.data$total_days)
   } else {
     .data %>% 
       mutate(
         gap = if_else(.data$adjusted_date == min(.data$adjusted_date), 0, .data$gap),
         max_date = max(.data$adjusted_date),
         min_date = min(.data$adjusted_date),
-        overlap = as.numeric(max_date - .data$adjusted_date),
+        overlap = as.numeric(.data$max_date - .data$adjusted_date),
         adjusted_gap = if_else(.data$overlap < .data$gap, .data$overlap, .data$gap)
       ) %>% 
       mutate(total_gaps = sum(.data$adjusted_gap),
              total_days = max(as.numeric(.data$max_date-.data$min_date)),
-             adherence = 1 - total_gaps/total_days)
+             adherence = 1 - .data$total_gaps/.data$total_days)
   }
 }
 
