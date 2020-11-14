@@ -90,7 +90,12 @@ summarises their gaps in therapy. This function is to be used after propagate_da
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/btbeal/adheRenceRX/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -105,13 +110,13 @@ summarises their gaps in therapy. This function is to be used after propagate_da
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarise Gaps in Therapy</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/btbeal/adheRenceRX/blob/master/R/Gaps.R'><code>R/Gaps.R</code></a></small>
     <div class="hidden name"><code>summarise_gaps.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function serves as a convenience wrapper of dplyr::summarise(), which takes the grouped variables and
-summarises their gaps in therapy. This function is to be used after propagate_date().</p>
+    <p>This function serves as a convenience wrapper of <code><a href='https://dplyr.tidyverse.org/reference/summarise.html'>dplyr::summarise()</a></code>, which takes the grouped variables and
+summarises their gaps in therapy. This function is to be used after <code><a href='propagate_date.html'>propagate_date()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>summarise_gaps</span><span class='op'>(</span><span class='va'>.data</span><span class='op'>)</span></pre>
@@ -129,6 +134,21 @@ summarises their gaps in therapy. This function is to be used after propagate_da
 
     <p>A summary of gaps in therapy</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/btbeal/adheRenceRX'>adheRenceRX</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+
+<span class='va'>toy_claims</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ID</span> <span class='op'>==</span> <span class='st'>"D"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='propagate_date.html'>propagate_date</a></span><span class='op'>(</span>.date_var <span class='op'>=</span> <span class='va'>date</span>, .days_supply_var <span class='op'>=</span> <span class='va'>days_supply</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>summarise_gaps</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1 x 1</span><span>
+#&gt;   Sum_Of_Gaps
+#&gt;         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>          30</div><div class='input'>
+
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

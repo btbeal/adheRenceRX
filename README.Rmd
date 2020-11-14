@@ -27,7 +27,7 @@ This was a lot of fun to build but is still in production. If you find errors, o
 
 ## Installation
 
-You can install the development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/btbeal/adheRenceRX) with:
 
 ``` r
 # install.packages("devtools")

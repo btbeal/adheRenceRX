@@ -9,16 +9,16 @@ propagate_date(.data, .date_var = NULL, .days_supply_var = NULL)
 \arguments{
 \item{.data}{Data to be piped into the function}
 
-\item{.date_var}{Date, Date column}
+\item{.date_var}{Date, column indicating the date of a given fill}
 
-\item{.days_supply_var}{Integer, Days supply column}
+\item{.days_supply_var}{Integer, column indicating the days supply of a given fill}
 }
 \value{
 A new claims data frame with an appended column, "adjusted_date"
 }
 \description{
 When assessing pharmaceutical adherence, one should adjust overlapping dates forward for a specified group (e.g. patient ids or medication classes) 
-so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and other 15 days later, the next fill date
+so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and another 15 days later, the next fill date
 should be moved up 15 days. This function is modeled after recommendations from Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
 Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.
 }
@@ -27,6 +27,6 @@ library(adheRenceRX)
 library(dplyr)
 
 toy_claims \%>\% 
-  group_by(ID) \%>\% 
+  filter(ID == "D") \%>\% 
   propagate_date(.date_var = date, .days_supply_var = days_supply)
 }

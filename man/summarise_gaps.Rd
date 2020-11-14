@@ -13,6 +13,18 @@ summarise_gaps(.data)
 A summary of gaps in therapy
 }
 \description{
-This function serves as a convenience wrapper of dplyr::summarise(), which takes the grouped variables and
-summarises their gaps in therapy. This function is to be used after propagate_date().
+This function serves as a convenience wrapper of \code{dplyr::summarise()}, which takes the grouped variables and
+summarises their gaps in therapy. This function is to be used after \code{propagate_date()}.
+}
+\examples{
+library(adheRenceRX)
+library(dplyr)
+
+toy_claims \%>\% 
+  filter(ID == "D") \%>\% 
+  propagate_date(.date_var = date, .days_supply_var = days_supply) \%>\% 
+  summarise_gaps()
+
+
+
 }

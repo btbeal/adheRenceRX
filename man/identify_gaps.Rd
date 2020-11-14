@@ -2,7 +2,7 @@
 % Please edit documentation in R/Gaps.R
 \name{identify_gaps}
 \alias{identify_gaps}
-\title{Identify Gaps in A Patient's Prescription Claims History}
+\title{Identify Gaps in Therapy}
 \usage{
 identify_gaps(.data)
 }
@@ -16,7 +16,7 @@ A new claims tibble with an appended column, "gap"
 Compute gaps in a patient's prescription claims history from the end of their prior fill 
 after one has adjusted dates with \code{propagate_date()}. This function assumes that one has
 arranged the dates and grouped appropriately outside of the function. The length of any gap will be appended 
-to the row after the gap has occured.
+to the row after the gap has occurred.
 }
 \examples{
 library(adheRenceRX)

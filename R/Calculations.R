@@ -3,9 +3,7 @@
 #' Calculate the proportion of days covered from a pharmaceutical claims database. This function is suggested only  
 #' after one has properly adjusted their dates (\code{propagate_date()}) and identified gaps in therapy
 #' (\code{identify_gaps()}). This function calculates a length of total therapy as the first fill date to the last for a given grouping. 
-#' Note that a proportion of days covered will never be greater than 1 and has a philosophy that 
-#' overlapping fill dates should be adjusted forwards but never backwards. Finally, if you'd like to view adherence by episodes after you have
-#' used \code{rank_episodes()}, the function will re-adjust gaps for you so that the gap that defined the episode isn't included.
+#' Finally, if you'd like to view adherence by episodes after you have used \code{rank_episodes()}, the function will re-adjust gaps for you so that the gap that defined the episode isn't included.
 #' 
 #'
 #' @param .data data frame 

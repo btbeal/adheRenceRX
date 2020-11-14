@@ -24,14 +24,12 @@ episode_check <- function(df){
 
 #' Rank Episodes of Care from Claims Data
 #'
-#' This function identifies and labels all episodes of care for a given patient in chronological order. It is meant to be used after one has
-#' appropriately adjusted dates (\code{propagate_date()}) and identified gaps (\code{identify_gaps()}) and at the minimum assumes that a data frame has 
-#' an adjusted_date column, which identifies the date after being adjusted for overlaps, and a gap column, which identifies gaps in therapy. Both of these will be generated
-#' by the aforementioned functions within this package!
+#' This function identifies and labels all episodes of care for a given patient in chronological order. A new episode begins after a specified gap in therapy has occurred. It is meant to be used after one has
+#' appropriately adjusted dates (\code{propagate_date()}) and identified gaps (\code{identify_gaps()}).
 #' 
-#' @param .data Data frame with "gap", "initial_rank", and "permi_gap" columns appended from \code{identify_gaps()}
+#' @param .data Data frame with a "gap" column appended from \code{identify_gaps()}
 #' @param .permissible_gap Integer value suggesting the maximum gap allowed before labeling a new episode of care
-#' @param .initial_rank Integer value to identify what the first rank should be (defaults to 1). 
+#' @param .initial_rank Integer value to identify what the indexing rank should be (defaults to 1). 
 #'
 #' @return a data frame with an "episode" column appended, which ranks episodes of care in time
 #' @export

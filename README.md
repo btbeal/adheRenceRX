@@ -25,7 +25,7 @@ errors, or know things you’d like to see done differently, reach out\!
 ## Installation
 
 You can install the development version from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/btbeal/adheRenceRX) with:
 
 ``` r
 # install.packages("devtools")

@@ -40,10 +40,8 @@
 
 
 <meta property="og:title" content="Rank Episodes of Care from Claims Data — rank_episodes" />
-<meta property="og:description" content="This function identifies and labels all episodes of care for a given patient in chronological order. It is meant to be used after one has
-appropriately adjusted dates (propagate_date()) and identified gaps (identify_gaps()) and at the minimum assumes that a data frame has 
-an adjusted_date column, which identifies the date after being adjusted for overlaps, and a gap column, which identifies gaps in therapy. Both of these will be generated
-by the aforementioned functions within this package!" />
+<meta property="og:description" content="This function identifies and labels all episodes of care for a given patient in chronological order. A new episode begins after a specified gap in therapy has occurred. It is meant to be used after one has
+appropriately adjusted dates (propagate_date()) and identified gaps (identify_gaps())." />
 
 
 
@@ -92,7 +90,12 @@ by the aforementioned functions within this package!" />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/btbeal/adheRenceRX/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -107,15 +110,13 @@ by the aforementioned functions within this package!" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Rank Episodes of Care from Claims Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/btbeal/adheRenceRX/blob/master/R/Episodes.R'><code>R/Episodes.R</code></a></small>
     <div class="hidden name"><code>rank_episodes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function identifies and labels all episodes of care for a given patient in chronological order. It is meant to be used after one has
-appropriately adjusted dates (<code><a href='propagate_date.html'>propagate_date()</a></code>) and identified gaps (<code><a href='identify_gaps.html'>identify_gaps()</a></code>) and at the minimum assumes that a data frame has 
-an adjusted_date column, which identifies the date after being adjusted for overlaps, and a gap column, which identifies gaps in therapy. Both of these will be generated
-by the aforementioned functions within this package!</p>
+    <p>This function identifies and labels all episodes of care for a given patient in chronological order. A new episode begins after a specified gap in therapy has occurred. It is meant to be used after one has
+appropriately adjusted dates (<code><a href='propagate_date.html'>propagate_date()</a></code>) and identified gaps (<code><a href='identify_gaps.html'>identify_gaps()</a></code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>rank_episodes</span><span class='op'>(</span><span class='va'>.data</span>, .permissible_gap <span class='op'>=</span> <span class='cn'>NULL</span>, .initial_rank <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
@@ -125,7 +126,7 @@ by the aforementioned functions within this package!</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>.data</th>
-      <td><p>Data frame with "gap", "initial_rank", and "permi_gap" columns appended from <code><a href='identify_gaps.html'>identify_gaps()</a></code></p></td>
+      <td><p>Data frame with a "gap" column appended from <code><a href='identify_gaps.html'>identify_gaps()</a></code></p></td>
     </tr>
     <tr>
       <th>.permissible_gap</th>
@@ -133,7 +134,7 @@ by the aforementioned functions within this package!</p>
     </tr>
     <tr>
       <th>.initial_rank</th>
-      <td><p>Integer value to identify what the first rank should be (defaults to 1).</p></td>
+      <td><p>Integer value to identify what the indexing rank should be (defaults to 1).</p></td>
     </tr>
     </table>
 
@@ -142,7 +143,7 @@ by the aforementioned functions within this package!</p>
     <p>a data frame with an "episode" column appended, which ranks episodes of care in time</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>adheRenceRX</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/btbeal/adheRenceRX'>adheRenceRX</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
 
 <span class='va'>toy_claims</span> <span class='op'>%&gt;%</span> 
