@@ -5,8 +5,8 @@ Version: 1.0.0
 Date: 2020-10-27
 Authors@R: person("Brennan", "Beal", email = "brennanbeal@gmail.com",
   role = c("aut", "cre"))
-Author: Brennan T. Beal
-Maintainer: Brennan T. Beal <brennanbeal@gmail.com>
+Author: Brennan Beal
+Maintainer: Brennan Beal <brennanbeal@gmail.com>
 Description: A (mildly) opinionated set of functions to help assess medication adherence for researchers working with medication claims data.
     Medication adherence analyses have several complex steps that are often convoluted and can be time-intensive. The focus is to create a 
     set of functions using "tidy principles" geared towards transparency, speed, and flexibility while working with adherence metrics. All functions perform exactly one task 

@@ -1,3 +1,8 @@
+## Resubmission
+This is a re-submission. In this version I have:
+
+* Removed my middle initial ("T.") from author and maintainer fields
+
 ## First Submission Comments
 * 1 note (common to most platform builds) was an identified spelling error, "vectorized," which is a commonly accepted term in the community and thus I've chosen to leave it.
 
