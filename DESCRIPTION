@@ -1,7 +1,7 @@
 Package: adheRenceRX
 Type: Package
 Title: A Group of Functions to Assess Medication Adherence from Pharmaceutical Claims Data
-Version: 0.0.0
+Version: 1.0.0
 Date: 2020-10-27
 Authors@R: person("Brennan", "Beal", email = "brennanbeal@gmail.com",
   role = c("aut", "cre"))
