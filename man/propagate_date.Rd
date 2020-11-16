@@ -2,7 +2,7 @@
 % Please edit documentation in R/Dates.R
 \name{propagate_date}
 \alias{propagate_date}
-\title{Adjusted Overlapping Pharmaceutical Claim Dates}
+\title{Adjust Overlapping Fill Dates}
 \usage{
 propagate_date(.data, .date_var = NULL, .days_supply_var = NULL)
 }
@@ -14,13 +14,18 @@ propagate_date(.data, .date_var = NULL, .days_supply_var = NULL)
 \item{.days_supply_var}{Integer, column indicating the days supply of a given fill}
 }
 \value{
-A new claims data frame with an appended column, "adjusted_date"
+The initial claims data frame with an appended column,  \code{adjusted_date}
 }
 \description{
 When assessing pharmaceutical adherence, one should adjust overlapping dates forward for a specified group (e.g. patient ids or medication classes) 
 so that there is no overlap in days supply. For example, if a patient receives a 30 days supply on January 1st, and another 15 days later, the next fill date
 should be moved up 15 days. This function is modeled after recommendations from Canfield SL, Zuckerman A, Anguiano RH, Jolly JA, DeClercq J.
 Navigating the wild west of medication adherence reporting in specialty pharmacy. J Manag Care Spec Pharm. 2019;25(10):1073-77.
+}
+\note{
+This function relies on \link[anytime]{anydate} to parse the users date variable into a date class. So, for most columns passed to .date_var, this function will run without warning or error.
+For example, \code{anydate(30)} will return "1970-01-31" even though 30 is most likely a days supply. If strange results are produced, double check that the 
+date variable being specified is indeed a fill date.
 }
 \examples{
 library(adheRenceRX)

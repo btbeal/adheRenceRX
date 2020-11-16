@@ -3,9 +3,8 @@
 #' This is a helper function to assist \code{rank_episodes}
 #'
 #' @param df a data frame with "gap", "initial_rank", and "permi_gap" columns appended from \code{identify_gaps()}
-#'
 #' @return a data frame with an "episode" column appended, which ranks episodes of care in time
-#' @export
+
 episode_check <- function(df){
   gap <- df$gap
   epi_rank <- unique(df$initial_rank)
@@ -22,16 +21,19 @@ episode_check <- function(df){
   }
 }
 
-#' Rank Episodes of Care from Claims Data
+#' Rank Episodes of Care
 #'
-#' This function identifies and labels all episodes of care for a given patient in chronological order. A new episode begins after a specified gap in therapy has occurred. It is meant to be used after one has
-#' appropriately adjusted dates (\code{propagate_date()}) and identified gaps (\code{identify_gaps()}).
+#' This function identifies and labels all episodes of care for a given patient in chronological order. A new episode begins after a specified gap in therapy has occurred. 
+#' It is meant to be used after one has appropriately adjusted dates (\code{propagate_date()}) and identified gaps in therapy (\code{identify_gaps()}).
 #' 
 #' @param .data Data frame with a "gap" column appended from \code{identify_gaps()}
 #' @param .permissible_gap Integer value suggesting the maximum gap allowed before labeling a new episode of care
 #' @param .initial_rank Integer value to identify what the indexing rank should be (defaults to 1). 
-#'
-#' @return a data frame with an "episode" column appended, which ranks episodes of care in time
+#' @note This function assumes an \code{adjusted_date} column, which is produced by the \code{propagate_date()} function and a
+#' \code{gap} column, which is produced by \code{identify_gaps()}. If you would like to rank episodes of care using other dates and a separate
+#' column for gaps, you'll need to rename those columns before passing the frame to \code{rank_episodes()}. Notably, this is on purpose as this step should
+#' almost always come after the former two.
+#' @return The initial claims data frame with an \code{episode} column appended, which ranks episodes of care in time
 #' @export
 #'
 #' @examples 

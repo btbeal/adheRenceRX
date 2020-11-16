@@ -10,7 +10,7 @@ date_check(df)
 \item{df}{a claims data frame with a date of a medication claim and the corresponding days supply}
 }
 \value{
-A new claims data frame with an appended column, "adjusted_date"
+A new claims data frame with an appended column, \code{adjusted_date}
 }
 \description{
 This is a function meant to be utilized within propagate_date() in order to adjust pharmaceutical claims dates to prevent

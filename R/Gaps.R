@@ -1,13 +1,14 @@
 #' Identify Gaps in Therapy
 #'
-#' @description Compute gaps in a patient's prescription claims history from the end of their prior fill 
-#' after one has adjusted dates with \code{propagate_date()}. This function assumes that one has
+#' @description Compute gaps in a patient's therapy from the end of their prior fill to the beginning of the next. This function assumes that one has
 #' arranged the dates and grouped appropriately outside of the function. The length of any gap will be appended 
 #' to the row after the gap has occurred.
 #' 
 #' @param .data data frame
+#' @note This function relies an \code{adjusted_date} column to identify gaps in therapy. So, if you don't want to use \code{propagate_date()} beforehand,
+#' you'll need to rename the date variable you wish to use to \code{adjusted_date}.
 #'
-#' @return A new claims tibble with an appended column, "gap"
+#' @return A new claims tibble with an appended column, \code{gap}
 #' @export
 #'
 #' @examples 
@@ -36,7 +37,8 @@ identify_gaps <- function(.data){
 #' summarises their gaps in therapy. This function is to be used after \code{propagate_date()}.
 #'
 #' @param .data Data to be piped into the function
-#'
+#' @note This function relies an \code{adjusted_date} column to identify gaps in therapy. So, if you don't want to use \code{propagate_date()} beforehand,
+#' you'll need to rename the date variable you wish to use to \code{adjusted_date}.
 #' @return A summary of gaps in therapy
 #' @export
 #'

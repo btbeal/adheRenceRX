@@ -1,18 +1,21 @@
 Package: adheRenceRX
 Type: Package
 Title: A Group of Functions to Assess Medication Adherence from Pharmaceutical Claims Data
-Version: 1.0
+Version: 0.0.0
 Date: 2020-10-27
+Authors@R: person("Brennan", "Beal", email = "brennanbeal@gmail.com",
+  role = c("aut", "cre"))
 Author: Brennan T. Beal
 Maintainer: Brennan T. Beal <brennanbeal@gmail.com>
 Description: A (mildly) opinionated set of functions to help assess medication adherence for researchers working with medication claims data.
- Medication adherence analyses have several complex steps that are often convoluted and can be time-intensive. The focus of this package was to create a 
- set of functions using "tidy principles" geared towards transparency, speed, and flexibility while working with adherence metrics. All functions perform exactly one task 
- with an intuitive name so that a researcher can handle details (often achieved with vectorised solutions) while we handle non-vectorised tasks common to most 
- adherence calculations such as adjusting fill dates and determining episodes of care.
+    Medication adherence analyses have several complex steps that are often convoluted and can be time-intensive. The focus is to create a 
+    set of functions using "tidy principles" geared towards transparency, speed, and flexibility while working with adherence metrics. All functions perform exactly one task 
+    with an intuitive name so that a researcher can handle details (often achieved with vectorized solutions) while we handle non-vectorized tasks common to most 
+    adherence calculations such as adjusting fill dates and determining episodes of care.
 License: GPL (>= 2)
 Imports: 
     Rcpp (>= 1.0.5),
+    anytime,
     tidyr,
     dplyr,
     purrr,
@@ -24,6 +27,8 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Suggests: 
-    testthat
+    testthat,
+    spelling
 URL: https://github.com/btbeal/adheRenceRX
 BugReports: https://github.com/btbeal/adheRenceRX/issues
+Language: en-US

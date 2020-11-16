@@ -16,6 +16,10 @@ A summary of gaps in therapy
 This function serves as a convenience wrapper of \code{dplyr::summarise()}, which takes the grouped variables and
 summarises their gaps in therapy. This function is to be used after \code{propagate_date()}.
 }
+\note{
+This function relies an \code{adjusted_date} column to identify gaps in therapy. So, if you don't want to use \code{propagate_date()} beforehand,
+you'll need to rename the date variable you wish to use to \code{adjusted_date}.
+}
 \examples{
 library(adheRenceRX)
 library(dplyr)
