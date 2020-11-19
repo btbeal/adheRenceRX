@@ -1,7 +1,12 @@
+## Resumbssion 2
+This is a re-submission (2020-11-19). In this version I have:
+
+* Added a citation to the description entry of my DESCRIPTION file to reference methodologies cited throughout (in the form of author (year) "Title" <doi:...>)
+
 ## Resubmission
 This is a re-submission. In this version I have:
 
-* Removed my middle initial ("T.") from author and maintainer fields
+* Removed author and maintainer fields in place of Authors@R
 
 ## First Submission Comments
 * 1 note (common to most platform builds) was an identified spelling error, "vectorized," which is a commonly accepted term in the community and thus I've chosen to leave it.
