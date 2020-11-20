@@ -1,3 +1,9 @@
+## Resubmission 3
+This is a re-submission (2020-11-19). In this version I have:
+
+* Reduced title length to < 65 characters.
+* Added a citation to the description entry of my DESCRIPTION file to reference methodologies cited throughout (in the form of author (year) "Title" <doi:...>)
+
 ## Resumbssion 2
 This is a re-submission (2020-11-19). In this version I have:
 
