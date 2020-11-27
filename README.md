@@ -24,12 +24,10 @@ errors, or know things you’d like to see done differently, reach out\!
 
 ## Installation
 
-You can install the development version from
-[GitHub](https://github.com/btbeal/adheRenceRX) with:
+You can install v1.0.0 from CRAN using
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("btbeal/adheRenceRX")
+install.packages("adheRenceRX")
 ```
 
 ## Overview
@@ -70,6 +68,7 @@ package is to be used.
 ``` r
 library(adheRenceRX)
 library(dplyr)
+library(magrittr)
 
 # manipulate toy_claims, which has IDs based on the Canfield 2019 paper 
 toy_claims %>% 
@@ -105,6 +104,45 @@ supply variable to `date` and `days_supply` while adding an
 `adjusted_date` variable. The `adjusted_date` variable is used by some
 of the other functions so it is important to complete this step first.
 
+To get a visual of what is happening here…
+
+``` r
+library(ggalt)
+library(tidyr)
+library(lubridate)
+toy_claims %>% 
+  filter(ID %in% c("B", "D")) %>% 
+  group_by(ID) %>% 
+  propagate_date(date, days_supply) %>% 
+  identify_gaps() %>% 
+  pivot_longer(cols = c("date", "adjusted_date"), 
+               names_to = "type", 
+               values_to = "date") %>% 
+  group_by(ID, type) %>% 
+  mutate(end = date + days(days_supply),
+         d_rank = rank(date)) %>% 
+  ggplot() +
+  geom_dumbbell(aes(x = date, xend = end, y = d_rank, color = ID), dot_guide = TRUE) +
+  ggthemes::theme_clean() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank()
+  ) +
+  facet_grid(rows = vars(ID, type)) +
+  labs(
+    y = "Fill Order",
+    x = "Fill Date",
+    title = "Visualizing Date Propagation for Adherence Calculations"
+  )
+```
+
+<img src="man/figures/README-visual-1.png" width="100%" />
+
+Notice how the overlapping dates are pushed forward - in the case of
+patient D, this removes what would have otherwise been counted as a gap
+between their third and fourth fill and accounts for stockpiling\!
+
 Once the dates have been adjusted, we can identify gaps in therapy with
 `identify_gaps()` or summarise them with `summarise_gaps()`.
 
@@ -115,6 +153,8 @@ toy_claims %>%
   group_by(ID) %>% 
   propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
   # But now we can identify gaps
+  # Note that the identified gap is appended to the fill after
+  # the gap occurs
   identify_gaps()
 #> # A tibble: 14 x 5
 #> # Groups:   ID [2]
@@ -144,10 +184,10 @@ toy_claims %>%
   # Summarising gaps
   summarise_gaps()
 #> # A tibble: 2 x 2
-#>   ID    Summary_Of_Gaps
-#>   <chr>           <dbl>
-#> 1 B                  60
-#> 2 D                  30
+#>   ID    Sum_Of_Gaps
+#>   <chr>       <dbl>
+#> 1 B              60
+#> 2 D              30
 ```
 
 With the gaps identified, we can check for episodes of care using our
@@ -162,8 +202,8 @@ episode\! Let me show you.
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
+  # Must propagate the date AND identify gaps in this workflow
   propagate_date(.date_var = date, .days_supply_var = days_supply) %>% 
-  # But now we can identify gaps
   identify_gaps() %>% 
   # say that anything over a 10 day gap should count as the next episode
   rank_episodes(.permissible_gap = 10)
@@ -205,6 +245,12 @@ toy_claims %>%
 #> 2 B             60        330     0.818
 #> 3 D             30        300     0.9
 ```
+
+Importantly, the total number of days (our denominator) is calculated
+from the first fill to the last fill. This generates a more conservative
+estimate for patients. Of course, to get around this (and include the
+last supply towards adherence), one could simply append an extra date
+for each patient.
 
 ## Enjoy\!
 

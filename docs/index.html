@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Group of Functions to Assess Medication Adherence from Pharmaceutical Claims Data • adheRenceRX</title>
+<title>Assess Medication Adherence from Pharmaceutical Claims Data • adheRenceRX</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A Group of Functions to Assess Medication Adherence from Pharmaceutical Claims Data">
+<script src="pkgdown.js"></script><meta property="og:title" content="Assess Medication Adherence from Pharmaceutical Claims Data">
 <meta property="og:description" content='A (mildly) opinionated set of functions to help assess medication adherence for researchers working with medication claims data.
     Medication adherence analyses have several complex steps that are often convoluted and can be time-intensive. The focus is to create a 
     set of functions using "tidy principles" geared towards transparency, speed, and flexibility while working with adherence metrics. All functions perform exactly one task 
@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">adheRenceRX</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9000</span>
       </span>
     </div>
 
@@ -50,6 +50,9 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -80,10 +83,9 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version from <a href="https://github.com/btbeal/adheRenceRX">GitHub</a> with:</p>
+<p>You can install v1.0.0 from CRAN using</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"btbeal/adheRenceRX"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"adheRenceRX"</span><span class="op">)</span></pre></div>
 </div>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
@@ -109,6 +111,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/btbeal/adheRenceRX">adheRenceRX</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">magrittr</span><span class="op">)</span>
 
 <span class="co"># manipulate toy_claims, which has IDs based on the Canfield 2019 paper </span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
@@ -137,14 +140,48 @@
 <span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28   </span>
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27</span></pre></div>
 <p>Notice that several rows have been pushed forward to account for overlaps in date. Also notice that the output changes the date and days supply variable to <code>date</code> and <code>days_supply</code> while adding an <code>adjusted_date</code> variable. The <code>adjusted_date</code> variable is used by some of the other functions so it is important to complete this step first.</p>
-<p>Once the dates have been adjusted, we can identify gaps in therapy with <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or summarise them with <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>.</p>
+<p>To get a visual of what is happening here…</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hrbrmstr/ggalt">ggalt</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span>
+<span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"adjusted_date"</span><span class="op">)</span>, 
+               names_to <span class="op">=</span> <span class="st">"type"</span>, 
+               values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">type</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>end <span class="op">=</span> <span class="va">date</span> <span class="op">+</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="va">days_supply</span><span class="op">)</span>,
+         d_rank <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/ggalt/man/geom_dumbbell.html">geom_dumbbell</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, xend <span class="op">=</span> <span class="va">end</span>, y <span class="op">=</span> <span class="va">d_rank</span>, color <span class="op">=</span> <span class="va">ID</span><span class="op">)</span>, dot_guide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggthemes/man/theme_clean.html">theme_clean</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>
+    panel.grid.major <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+    panel.grid.minor <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+    panel.grid.major.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu">facet_grid</span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>
+    y <span class="op">=</span> <span class="st">"Fill Order"</span>,
+    x <span class="op">=</span> <span class="st">"Fill Date"</span>,
+    title <span class="op">=</span> <span class="st">"Visualizing Date Propagation for Adherence Calculations"</span>
+  <span class="op">)</span></pre></div>
+<p><img src="reference/figures/README-visual-1.png" width="100%"></p>
+<p>Notice how the overlapping dates are pushed forward - in the case of patient D, this removes what would have otherwise been counted as a gap between their third and fourth fill and accounts for stockpiling!</p>
+<p>Once the dates have been adjusted, we can identify gaps in therapy with <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or summarise them with <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="co"># The same code from above</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># But now we can identify gaps</span>
+  <span class="co"># Note that the identified gap is appended to the fill after</span>
+  <span class="co"># the gap occurs</span>
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 14 x 5</span>
 <span class="co">#&gt; # Groups:   ID [2]</span>
@@ -174,18 +211,18 @@
   <span class="co"># Summarising gaps</span>
   <span class="fu"><a href="reference/summarise_gaps.html">summarise_gaps</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 2 x 2</span>
-<span class="co">#&gt;   ID    Summary_Of_Gaps</span>
-<span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 B                  60</span>
-<span class="co">#&gt; 2 D                  30</span></pre></div>
+<span class="co">#&gt;   ID    Sum_Of_Gaps</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 B              60</span>
+<span class="co">#&gt; 2 D              30</span></pre></div>
 <p>With the gaps identified, we can check for episodes of care using our <code><a href="reference/rank_episodes.html">rank_episodes()</a></code> functions. Note that this function assumes that you’ve propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, and everything after a gap that large or more will be considered the next episode! Let me show you.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co"># The same code from above</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="co"># Must propagate the date AND identify gaps in this workflow</span>
   <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="co"># But now we can identify gaps</span>
   <span class="fu"><a href="reference/identify_gaps.html">identify_gaps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># say that anything over a 10 day gap should count as the next episode</span>
   <span class="fu"><a href="reference/rank_episodes.html">rank_episodes</a></span><span class="op">(</span>.permissible_gap <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
@@ -208,7 +245,7 @@
 <span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28       30       2</span>
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0       2</span></pre></div>
 <p>Finally, an actual adherence calculation. This is fairly straightforward since the bulk of the work has been done adjusting your dates and then appropriately identifying the gaps in therapy. Still, more functions = more fun!</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -220,6 +257,7 @@
 <span class="co">#&gt; 1 A              0        270     1    </span>
 <span class="co">#&gt; 2 B             60        330     0.818</span>
 <span class="co">#&gt; 3 D             30        300     0.9</span></pre></div>
+<p>Importantly, the total number of days (our denominator) is calculated from the first fill to the last fill. This generates a more conservative estimate for patients. Of course, to get around this (and include the last supply towards adherence), one could simply append an extra date for each patient.</p>
 </div>
 <div id="enjoy" class="section level2">
 <h2 class="hasAnchor">
@@ -240,6 +278,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=adheRenceRX">https://​cloud.r-project.org/​package=adheRenceRX</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/btbeal/adheRenceRX/">https://​github.com/​btbeal/​adheRenceRX/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/btbeal/adheRenceRX/issues">https://​github.com/​btbeal/​adheRenceRX/​issues</a>
