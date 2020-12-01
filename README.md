@@ -4,6 +4,8 @@
 # adheRenceRX
 
 Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
+… Or check out our
+[Github](https://github.com/btbeal/adheRenceRX/tree/master)
 <!-- badges: start --> <!-- badges: end -->
 
 The goal of adheRenceRX is to provide a slightly opinionated set of
@@ -28,6 +30,12 @@ You can install v1.0.0 from CRAN using
 
 ``` r
 install.packages("adheRenceRX")
+```
+
+… Or you can install the dev version in you’re feeling wild\!
+
+``` r
+devtools::install_github("btbeal/adheRenceRX", ref = "Dev")
 ```
 
 ## Overview
@@ -62,8 +70,15 @@ is subject to change in the future.
 ## Examples
 
 More examples of use can be found on within each functions
-documentation; however, this should provide a decent overview of how the
-package is to be used.
+documentation; however, this should provide a decent idea of intended
+package workflow.
+
+Take a look at our `toy_claims` data loaded with the package. Notice
+that there is a patient identifier, a fill date, and a days supply.
+Often times these can be messy. Ideally, you’ll have cleaned this up
+before you need our package. The very next thing to be done is to adjust
+these fill dates so that they are not overlapping. We can do that with
+`propagate_date()`.
 
 ``` r
 library(adheRenceRX)
@@ -110,6 +125,7 @@ To get a visual of what is happening here…
 library(ggalt)
 library(tidyr)
 library(lubridate)
+library(ggtext)
 toy_claims %>% 
   filter(ID %in% c("B", "D")) %>% 
   group_by(ID) %>% 
@@ -118,22 +134,34 @@ toy_claims %>%
   pivot_longer(cols = c("date", "adjusted_date"), 
                names_to = "type", 
                values_to = "date") %>% 
+  mutate(type = if_else(type == "date", "Pre", "Post"),
+         type = factor(type, levels = c("Pre", "Post"))) %>% 
   group_by(ID, type) %>% 
   mutate(end = date + days(days_supply),
          d_rank = rank(date)) %>% 
   ggplot() +
   geom_dumbbell(aes(x = date, xend = end, y = d_rank, color = ID), dot_guide = TRUE) +
   ggthemes::theme_clean() +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.y = element_blank()
+  theme(text=element_text(size=16,  family="Arial"),
+        axis.title.y = element_blank(),
+        legend.text=element_text(size=14, family="Arial"),
+        legend.title=element_text(family = "Arial"),
+        plot.caption = element_markdown(size = 10, family = "Arial", lineheight = 1.2, hjust = 0),
+        plot.caption.position = "panel",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.spacing.x = unit(10, "mm")
   ) +
-  facet_grid(rows = vars(ID, type)) +
+  facet_grid(ID ~ type) +
+  guides(color = FALSE) +
   labs(
     y = "Fill Order",
     x = "Fill Date",
-    title = "Visualizing Date Propagation for Adherence Calculations"
+    caption = "<b>Figure 1</b> Two mock patient IDs, 'B' and 'D', pre and post fill-date adjustments<br>
+      <b>Notes</b> The purpose of this function is to shift overlapping dates forward to account for <br>
+      stockpiling. Note that for Patient 'D', this removes a gap. <br>
+      <b>Abbreviations</b> NTG, normal-tension glaucoma"
   )
 ```
 
@@ -144,7 +172,11 @@ patient D, this removes what would have otherwise been counted as a gap
 between their third and fourth fill and accounts for stockpiling\!
 
 Once the dates have been adjusted, we can identify gaps in therapy with
-`identify_gaps()` or summarise them with `summarise_gaps()`.
+`identify_gaps()` or summarise them with `summarise_gaps()`. Note, we
+must identify our gaps in therapy to move forward because our
+calculations depend on those gaps as well as the episodes of care
+function. Again, this structure revolves around the
+one-function-one-task principle.
 
 ``` r
 # The same code from above
@@ -195,7 +227,10 @@ With the gaps identified, we can check for episodes of care using our
 propagated your dates appropriately and identified all gaps. You can
 then tell our function what can be considered a permissible gap, and
 everything after a gap that large or more will be considered the next
-episode\! Let me show you.
+episode\! This function is useful for medication persistence questions
+as well given that you can classify gaps larger than a given
+`.permissable_gap` as a new episode and then group by those episodes.
+Let me show you.
 
 ``` r
 # The same code from above

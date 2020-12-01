@@ -77,7 +77,7 @@
 <div id="adherencerx" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#adherencerx" class="anchor"></a>adheRenceRX</h1></div>
-<p>Check out our site <a href="https://btbeal.github.io/adheRenceRX/">adheRenceRX</a> <!-- badges: start --> <!-- badges: end --></p>
+<p>Check out our site <a href="https://btbeal.github.io/adheRenceRX/">adheRenceRX</a> … Or check out our <a href="https://github.com/btbeal/adheRenceRX/tree/master">Github</a> <!-- badges: start --> <!-- badges: end --></p>
 <p>The goal of adheRenceRX is to provide a slightly opinionated set of functions to allow researchers to assess medication adherence in the most flexible way possible. The goal was (is) to write piping-friendly verbs the “tidy” way to allow users to manipulate their data as they’d like without storing data multiple times into their environment. In tidy fashion, we aimed to create functions that did only one thing, ideally that thing is obviated by the name of the function! So, the package makes assessing adherence as flexible as possible with some key things left in the hands of the researcher. The final value is that functions without vectorised solutions (<code><a href="reference/propagate_date.html">propagate_date()</a></code> and <code><a href="reference/rank_episodes.html">rank_episodes()</a></code>) are written with C++ allowing speed and performance when you’d rather do research than run a function for an hour!</p>
 <p>This was a lot of fun to build but is still in production. If you find errors, or know things you’d like to see done differently, reach out!</p>
 <div id="installation" class="section level2">
@@ -86,6 +86,9 @@
 <p>You can install v1.0.0 from CRAN using</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"adheRenceRX"</span><span class="op">)</span></pre></div>
+<p>… Or you can install the dev version in you’re feeling wild!</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"btbeal/adheRenceRX"</span>, ref <span class="op">=</span> <span class="st">"Dev"</span><span class="op">)</span></pre></div>
 </div>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
@@ -107,8 +110,9 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p>More examples of use can be found on within each functions documentation; however, this should provide a decent overview of how the package is to be used.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
+<p>More examples of use can be found on within each functions documentation; however, this should provide a decent idea of intended package workflow.</p>
+<p>Take a look at our <code>toy_claims</code> data loaded with the package. Notice that there is a patient identifier, a fill date, and a days supply. Often times these can be messy. Ideally, you’ll have cleaned this up before you need our package. The very next thing to be done is to adjust these fill dates so that they are not overlapping. We can do that with <code><a href="reference/propagate_date.html">propagate_date()</a></code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/btbeal/adheRenceRX">adheRenceRX</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">magrittr</span><span class="op">)</span>
@@ -141,10 +145,11 @@
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27</span></pre></div>
 <p>Notice that several rows have been pushed forward to account for overlaps in date. Also notice that the output changes the date and days supply variable to <code>date</code> and <code>days_supply</code> while adding an <code>adjusted_date</code> variable. The <code>adjusted_date</code> variable is used by some of the other functions so it is important to complete this step first.</p>
 <p>To get a visual of what is happening here…</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hrbrmstr/ggalt">ggalt</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/ggtext">ggtext</a></span><span class="op">)</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -153,27 +158,39 @@
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"adjusted_date"</span><span class="op">)</span>, 
                names_to <span class="op">=</span> <span class="st">"type"</span>, 
                values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"date"</span>, <span class="st">"Pre"</span>, <span class="st">"Post"</span><span class="op">)</span>,
+         type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">type</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Pre"</span>, <span class="st">"Post"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">type</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>end <span class="op">=</span> <span class="va">date</span> <span class="op">+</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="va">days_supply</span><span class="op">)</span>,
          d_rank <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/ggalt/man/geom_dumbbell.html">geom_dumbbell</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, xend <span class="op">=</span> <span class="va">end</span>, y <span class="op">=</span> <span class="va">d_rank</span>, color <span class="op">=</span> <span class="va">ID</span><span class="op">)</span>, dot_guide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggthemes/man/theme_clean.html">theme_clean</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>
-    panel.grid.major <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-    panel.grid.minor <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-    panel.grid.major.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>
+  <span class="fu">theme</span><span class="op">(</span>text<span class="op">=</span><span class="fu">element_text</span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span>,  family<span class="op">=</span><span class="st">"Arial"</span><span class="op">)</span>,
+        axis.title.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+        legend.text<span class="op">=</span><span class="fu">element_text</span><span class="op">(</span>size<span class="op">=</span><span class="fl">14</span>, family<span class="op">=</span><span class="st">"Arial"</span><span class="op">)</span>,
+        legend.title<span class="op">=</span><span class="fu">element_text</span><span class="op">(</span>family <span class="op">=</span> <span class="st">"Arial"</span><span class="op">)</span>,
+        plot.caption <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span>, family <span class="op">=</span> <span class="st">"Arial"</span>, lineheight <span class="op">=</span> <span class="fl">1.2</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,
+        plot.caption.position <span class="op">=</span> <span class="st">"panel"</span>,
+        panel.grid.major <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+        panel.grid.minor <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+        panel.grid.major.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
+        panel.spacing.x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">10</span>, <span class="st">"mm"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">facet_grid</span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">facet_grid</span><span class="op">(</span><span class="va">ID</span> <span class="op">~</span> <span class="va">type</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">guides</span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>
     y <span class="op">=</span> <span class="st">"Fill Order"</span>,
     x <span class="op">=</span> <span class="st">"Fill Date"</span>,
-    title <span class="op">=</span> <span class="st">"Visualizing Date Propagation for Adherence Calculations"</span>
+    caption <span class="op">=</span> <span class="st">"&lt;b&gt;Figure 1&lt;/b&gt; Two mock patient IDs, 'B' and 'D', pre and post fill-date adjustments&lt;br&gt;
+      &lt;b&gt;Notes&lt;/b&gt; The purpose of this function is to shift overlapping dates forward to account for &lt;br&gt;
+      stockpiling. Note that for Patient 'D', this removes a gap. &lt;br&gt;
+      &lt;b&gt;Abbreviations&lt;/b&gt; NTG, normal-tension glaucoma"</span>
   <span class="op">)</span></pre></div>
 <p><img src="reference/figures/README-visual-1.png" width="100%"></p>
 <p>Notice how the overlapping dates are pushed forward - in the case of patient D, this removes what would have otherwise been counted as a gap between their third and fourth fill and accounts for stockpiling!</p>
-<p>Once the dates have been adjusted, we can identify gaps in therapy with <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or summarise them with <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<p>Once the dates have been adjusted, we can identify gaps in therapy with <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or summarise them with <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>. Note, we must identify our gaps in therapy to move forward because our calculations depend on those gaps as well as the episodes of care function. Again, this structure revolves around the one-function-one-task principle.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co"># The same code from above</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -215,8 +232,8 @@
 <span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 B              60</span>
 <span class="co">#&gt; 2 D              30</span></pre></div>
-<p>With the gaps identified, we can check for episodes of care using our <code><a href="reference/rank_episodes.html">rank_episodes()</a></code> functions. Note that this function assumes that you’ve propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, and everything after a gap that large or more will be considered the next episode! Let me show you.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<p>With the gaps identified, we can check for episodes of care using our <code><a href="reference/rank_episodes.html">rank_episodes()</a></code> functions. Note that this function assumes that you’ve propagated your dates appropriately and identified all gaps. You can then tell our function what can be considered a permissible gap, and everything after a gap that large or more will be considered the next episode! This function is useful for medication persistence questions as well given that you can classify gaps larger than a given <code>.permissable_gap</code> as a new episode and then group by those episodes. Let me show you.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="co"># The same code from above</span>
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -245,7 +262,7 @@
 <span class="co">#&gt; 13 D     2020-08-28          60 2020-08-28       30       2</span>
 <span class="co">#&gt; 14 D     2020-09-27          30 2020-10-27        0       2</span></pre></div>
 <p>Finally, an actual adherence calculation. This is fairly straightforward since the bulk of the work has been done adjusting your dates and then appropriately identifying the gaps in therapy. Still, more functions = more fun!</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="va">toy_claims</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/propagate_date.html">propagate_date</a></span><span class="op">(</span>.date_var <span class="op">=</span> <span class="va">date</span>, .days_supply_var <span class="op">=</span> <span class="va">days_supply</span><span class="op">)</span> <span class="op">%&gt;%</span> 
