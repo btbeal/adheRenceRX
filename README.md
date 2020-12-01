@@ -160,12 +160,11 @@ toy_claims %>%
     x = "Fill Date",
     caption = "<b>Figure 1</b> Two mock patient IDs, 'B' and 'D', pre and post fill-date adjustments<br>
       <b>Notes</b> The purpose of this function is to shift overlapping dates forward to account for <br>
-      stockpiling. Note that for Patient 'D', this removes a gap. <br>
-      <b>Abbreviations</b> NTG, normal-tension glaucoma"
+      stockpiling. Note that for Patient 'D', this removes a gap. <br>"
   )
 ```
 
-<img src="man/figures/README-visual-1.png" width="100%" />
+<img src="man/figures/README-visual-1.png" width="80%" style="display: block; margin: auto;" />
 
 Notice how the overlapping dates are pushed forward - in the case of
 patient D, this removes what would have otherwise been counted as a gap

@@ -11,7 +11,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  fig.align = "center",
+  out.width = "80%"
 )
 ```
 
@@ -121,8 +122,7 @@ toy_claims %>%
     x = "Fill Date",
     caption = "<b>Figure 1</b> Two mock patient IDs, 'B' and 'D', pre and post fill-date adjustments<br>
       <b>Notes</b> The purpose of this function is to shift overlapping dates forward to account for <br>
-      stockpiling. Note that for Patient 'D', this removes a gap. <br>
-      <b>Abbreviations</b> NTG, normal-tension glaucoma"
+      stockpiling. Note that for Patient 'D', this removes a gap. <br>"
   )
 ```
   
