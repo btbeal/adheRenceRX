@@ -3,8 +3,8 @@
 
 # adheRenceRX
 
-Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
-… Or check out our
+Check out our updated site
+[adheRenceRX](https://btbeal.github.io/adheRenceRX/) … Or check out our
 [Github](https://github.com/btbeal/adheRenceRX/tree/master)
 <!-- badges: start --> <!-- badges: end -->
 

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # adheRenceRX
 
-Check out our site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
+Check out our updated site [adheRenceRX](https://btbeal.github.io/adheRenceRX/)
 ... Or check out our [Github](https://github.com/btbeal/adheRenceRX/tree/master)
 <!-- badges: start -->
 <!-- badges: end -->
@@ -83,7 +83,7 @@ Notice that several rows have been pushed forward to account for overlaps in dat
   
 To get a visual of what is happening here...
   
-```{r visual, dpi=300, cache=TRUE}
+```{r visual, dpi=300}
 library(ggalt)
 library(tidyr)
 library(lubridate)

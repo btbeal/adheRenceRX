@@ -184,10 +184,9 @@
     x <span class="op">=</span> <span class="st">"Fill Date"</span>,
     caption <span class="op">=</span> <span class="st">"&lt;b&gt;Figure 1&lt;/b&gt; Two mock patient IDs, 'B' and 'D', pre and post fill-date adjustments&lt;br&gt;
       &lt;b&gt;Notes&lt;/b&gt; The purpose of this function is to shift overlapping dates forward to account for &lt;br&gt;
-      stockpiling. Note that for Patient 'D', this removes a gap. &lt;br&gt;
-      &lt;b&gt;Abbreviations&lt;/b&gt; NTG, normal-tension glaucoma"</span>
+      stockpiling. Note that for Patient 'D', this removes a gap. &lt;br&gt;"</span>
   <span class="op">)</span></pre></div>
-<p><img src="reference/figures/README-visual-1.png" width="100%"></p>
+<p><img src="reference/figures/README-visual-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Notice how the overlapping dates are pushed forward - in the case of patient D, this removes what would have otherwise been counted as a gap between their third and fourth fill and accounts for stockpiling!</p>
 <p>Once the dates have been adjusted, we can identify gaps in therapy with <code><a href="reference/identify_gaps.html">identify_gaps()</a></code> or summarise them with <code><a href="reference/summarise_gaps.html">summarise_gaps()</a></code>. Note, we must identify our gaps in therapy to move forward because our calculations depend on those gaps as well as the episodes of care function. Again, this structure revolves around the one-function-one-task principle.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
